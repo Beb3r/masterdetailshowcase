@@ -9,4 +9,7 @@ android {
 
 dependencies {
     implementation(libs.kotlinx.serialization)
+    implementation(libs.bundles.ktor)
+
+    implementation(projects.core.network.api)
 }

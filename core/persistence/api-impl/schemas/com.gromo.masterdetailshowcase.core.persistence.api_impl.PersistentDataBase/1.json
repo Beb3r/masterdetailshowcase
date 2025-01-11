@@ -1,0 +1,106 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "38fc3174a677ac44011112dd6dec4437",
+    "entities": [
+      {
+        "tableName": "country",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `nameCommon` TEXT NOT NULL, `nameOfficial` TEXT NOT NULL, `independent` INTEGER NOT NULL, `unMember` INTEGER NOT NULL, `capital` TEXT NOT NULL, `altSpellings` TEXT NOT NULL, `continents` TEXT NOT NULL, `region` TEXT NOT NULL, `subregion` TEXT NOT NULL, `flagUrl` TEXT NOT NULL, `area` REAL NOT NULL, `population` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nameCommon",
+            "columnName": "nameCommon",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nameOfficial",
+            "columnName": "nameOfficial",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "independent",
+            "columnName": "independent",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unMember",
+            "columnName": "unMember",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "capital",
+            "columnName": "capital",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "altSpellings",
+            "columnName": "altSpellings",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "continents",
+            "columnName": "continents",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "region",
+            "columnName": "region",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subregion",
+            "columnName": "subregion",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "flagUrl",
+            "columnName": "flagUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "area",
+            "columnName": "area",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "population",
+            "columnName": "population",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '38fc3174a677ac44011112dd6dec4437')"
+    ]
+  }
+}

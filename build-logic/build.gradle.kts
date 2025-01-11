@@ -20,11 +20,15 @@ gradlePlugin {
     plugins {
         register("moduleAndroidApplication") {
             id = "com.gromo.masterdetailshowcase.module.android.application"
-            implementationClass = "com.gromo.masterdetailshowcase.build_logic.AndroidApplicationModuleConventionPlugin"
+            implementationClass = "com.gromo.masterdetailshowcase.build_logic.AndroidApplicationModulePlugin"
         }
         register("moduleAndroidLibrary") {
             id = "com.gromo.masterdetailshowcase.module.android.library"
-            implementationClass = "com.gromo.masterdetailshowcase.build_logic.AndroidLibraryModuleConventionPlugin"
+            implementationClass = "com.gromo.masterdetailshowcase.build_logic.AndroidLibraryModulePlugin"
+        }
+        register("moduleAndroidPresentation") {
+            id = "com.gromo.masterdetailshowcase.module.android.presentation"
+            implementationClass = "com.gromo.masterdetailshowcase.build_logic.AndroidPresentationModulePlugin"
         }
     }
 }

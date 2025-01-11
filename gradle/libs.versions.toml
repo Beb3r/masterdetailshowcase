@@ -1,6 +1,6 @@
 [versions]
 agp = "8.7.3"
-kotlin = "2.0.20"
+kotlin = "2.1.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -9,13 +9,17 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
 composeBom = "2024.12.01"
 jetbrainsKotlinJvm = "2.0.0"
-ksp = "2.0.20-1.0.25"
+ksp = "2.1.0-1.0.29"
 koin = "4.0.1"
 koin-annotations = "2.0.0-Beta3"
 coroutines = "1.10.1"
 kotlinx-serialization = "1.8.0-RC"
 kotlinx-serialization-plugin = "2.1.0"
 ktor = "3.0.3"
+ktor-coroutines="0.9.2"
+room = "2.6.1"
+navigation = "2.8.5"
+material3 = "1.4.0-alpha05"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -25,23 +29,40 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koin-annotations" }
 koin-ksp-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koin-annotations" }
+koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+koin-compose-navigation = { group = "io.insert-koin", name = "koin-androidx-compose-navigation", version.ref = "koin" }
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
-ktor-client = { group = "io.ktor", name = "ktor-client-core", version.ref="ktor" }
+ktor-core = { group = "io.ktor", name = "ktor-client-core", version.ref="ktor" }
+ktor-android = { group = "io.ktor", name = "ktor-client-android", version.ref="ktor" }
+ktor-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref="ktor" }
+ktor-content-negociation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref="ktor" }
+ktor-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref="ktor" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref="room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref="room" }
+room-common = { group = "androidx.room", name = "room-common", version.ref="room" }
+room-ksp = { group = "androidx.room", name = "room-compiler", version.ref="room" }
+
+
 # build-logic
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+
+[bundles]
+ktor = ["ktor-core", "ktor-android", "ktor-serialization", "ktor-content-negociation", "ktor-logging"]
+room = ["room-runtime", "room-ktx"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -51,6 +72,9 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinx-serialization-plugin" }
+room = { id = "androidx.room", version.ref = "room" }
+
 # build-logic
 module-android-application = { id = "com.gromo.masterdetailshowcase.module.android.application", version = "unspecified" }
 module-android-library = { id = "com.gromo.masterdetailshowcase.module.android.library", version = "unspecified" }
+module-android-presentation = { id = "com.gromo.masterdetailshowcase.module.android.presentation", version = "unspecified" }
