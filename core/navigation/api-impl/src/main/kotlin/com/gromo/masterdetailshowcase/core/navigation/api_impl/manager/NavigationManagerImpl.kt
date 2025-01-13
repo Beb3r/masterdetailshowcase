@@ -2,7 +2,7 @@ package com.gromo.masterdetailshowcase.core.navigation.api_impl.manager
 
 import androidx.navigation.NavController
 import com.gromo.masterdetailshowcase.core.common.dispatchers.AppCoroutineDispatchers
-import com.gromo.masterdetailshowcase.core.navigation.api.NavControllerSetter
+import com.gromo.masterdetailshowcase.core.navigation.api.NavControllerAccessor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class NavigationManagerImpl(
     coroutineDispatchers: AppCoroutineDispatchers,
-) : NavigationManager, NavControllerSetter {
+) : NavigationManager, NavControllerAccessor {
 
     private var navControllerFlow = MutableStateFlow<NavController?>(null)
     private val scope by lazy { CoroutineScope(SupervisorJob() + coroutineDispatchers.main) }

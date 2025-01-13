@@ -1,6 +1,5 @@
 package com.gromo.masterdetailshowcase.features.home.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gromo.masterdetailshowcase.core.characters.domain.use_cases.FetchAllCharactersUseCase
@@ -8,6 +7,7 @@ import com.gromo.masterdetailshowcase.core.characters.domain.use_cases.ObserveAl
 import com.gromo.masterdetailshowcase.core.common.combines
 import com.gromo.masterdetailshowcase.core.common.dispatchers.AppCoroutineDispatchers
 import com.gromo.masterdetailshowcase.core.common.stateIn
+import com.gromo.masterdetailshowcase.features.home.navigation.HomeNavigation
 import com.gromo.masterdetailshowcase.features.home.presentation.mappers.toUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeViewStateUiModel
 import kotlinx.collections.immutable.toPersistentList
@@ -18,12 +18,14 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
+import timber.log.Timber
 
 @KoinViewModel
 class HomeViewModel(
     observeAllCharactersUseCase: ObserveAllCharactersUseCase,
     private val coroutineDispatcher: AppCoroutineDispatchers,
     private val fetchAllCharactersUseCase: FetchAllCharactersUseCase,
+    private val navigation: HomeNavigation,
 ) : ViewModel() {
 
     private val fetchErrorFlow = MutableStateFlow<Throwable?>(null)
@@ -36,7 +38,7 @@ class HomeViewModel(
             fetchErrorFlow,
             isRefreshingFlow,
         ).mapLatest { (characters, fetchError, isRefreshing) ->
-            Log.d("HomeViewModel", "Characters: $characters")
+            Timber.d("Characters: $characters")
             when {
                 characters.isEmpty() -> {
                     if (fetchError != null) {
@@ -86,14 +88,14 @@ class HomeViewModel(
                     isRefreshingFlow.value = false
                 }
                 .onFailure { error ->
-                    Log.d("HomeViewModel", "Error: $error")
+                    Timber.w("Error fetching characters: $error")
                     isRefreshingFlow.value = false
                     fetchErrorFlow.value = error
                 }
         }
     }
 
-    private fun onCharacterClicked(characterId: Int) {
-        Log.d("HomeViewModel", "Character clicked: $characterId")
+    private fun onCharacterClicked(id: Int) {
+        navigation.navigateToCharacterDetails(id = id)
     }
 }

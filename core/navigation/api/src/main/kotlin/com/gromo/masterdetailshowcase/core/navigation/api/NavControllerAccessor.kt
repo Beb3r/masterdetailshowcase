@@ -2,7 +2,8 @@ package com.gromo.masterdetailshowcase.core.navigation.api
 
 import androidx.navigation.NavController
 
-interface NavControllerSetter {
+interface NavControllerAccessor {
 
     fun setController(navController: NavController)
+    fun clear()
 }

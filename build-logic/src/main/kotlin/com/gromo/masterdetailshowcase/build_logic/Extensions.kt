@@ -107,5 +107,8 @@ fun Project.setupBaseDependencies() {
         implementation(libs.koin.asProvider())
         implementation(libs.koin.annotations)
         ksp(libs.koin.ksp.compiler)
+
+        // Timber
+        implementation(libs.timber)
     }
 }

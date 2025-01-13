@@ -1,5 +1,11 @@
 @file:Suppress("UnstableApiUsage")
 
+include(":features:character-details:navigation")
+
+
+include(":features:home:navigation")
+
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {

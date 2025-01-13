@@ -14,4 +14,5 @@ ksp {
 dependencies {
     implementation(projects.core.common)
     implementation(projects.core.characters.domain)
+    implementation(projects.features.home.navigation)
 }

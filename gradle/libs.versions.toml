@@ -21,6 +21,7 @@ room = "2.6.1"
 navigation = "2.8.5"
 material3 = "1.4.0-alpha05"
 kotlinx-collections-immutable = "0.3.7"
+timber = "5.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -56,6 +57,7 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref="room" }
 room-common = { group = "androidx.room", name = "room-common", version.ref="room" }
 room-ksp = { group = "androidx.room", name = "room-compiler", version.ref="room" }
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable"}
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 
 # build-logic

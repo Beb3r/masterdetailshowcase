@@ -4,6 +4,7 @@ import android.app.Application
 import com.gromo.masterdetailshowcase.core.common.di.commonModule
 import com.gromo.masterdetailshowcase.core.characters.data.di.CharactersDataModule
 import com.gromo.masterdetailshowcase.core.characters.domain.di.CharactersDomainModule
+import com.gromo.masterdetailshowcase.core.navigation.api_impl.di.navigationModule
 import com.gromo.masterdetailshowcase.core.network.api_impl.networkModule
 import com.gromo.masterdetailshowcase.core.persistence.api_impl.di.databaseModule
 import com.gromo.masterdetailshowcase.features.home.presentation.di.HomePresentationModule
@@ -12,6 +13,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
 import org.koin.ksp.generated.module
+import timber.log.Timber
 
 class AppApplication : Application() {
     override fun onCreate() {
@@ -20,14 +22,18 @@ class AppApplication : Application() {
             androidLogger()
             androidContext(this@AppApplication)
 
+            // TODO plant debug tree only in debug builds
+            Timber.plant(Timber.DebugTree())
+
             modules(
-                commonModule,
-                databaseModule,
-                networkModule,
                 CharactersDataModule().module,
                 CharactersDomainModule().module,
-                HomePresentationModule().module,
                 CharacterDetailsPresentationModule().module,
+                commonModule,
+                databaseModule,
+                HomePresentationModule().module,
+                navigationModule,
+                networkModule,
             )
         }
     }

@@ -4,14 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.runtime.DisposableEffect
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.gromo.masterdetailshowcase.core.navigation.api.NavControllerAccessor
+import com.gromo.masterdetailshowcase.features.character_details.navigation.CharacterDetailsScreenRoute
+import com.gromo.masterdetailshowcase.features.character_details.presentation.CharacterDetailsScreen
+import com.gromo.masterdetailshowcase.features.home.navigation.HomeScreenRoute
 import com.gromo.masterdetailshowcase.features.home.presentation.HomeScreen
 import com.gromo.masterdetailshowcase.ui.theme.MasterDetailShowCaseTheme
+import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,26 +24,32 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MasterDetailShowCaseTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HomeScreen()
+                val navController = rememberNavController()
+                val navigationManager: NavControllerAccessor = get()
+
+                DisposableEffect(navController) {
+                    navigationManager.setController(navController)
+                    onDispose {
+                        navigationManager.clear()
+                    }
+                }
+
+                NavHost(
+                    navController = navController,
+                    startDestination = HomeScreenRoute,
+                    enterTransition = { slideInHorizontally { it } },
+                    exitTransition = { slideOutHorizontally { -it } },
+                    popEnterTransition = { slideInHorizontally { -it } },
+                    popExitTransition = { slideOutHorizontally { it } },
+                ) {
+                    composable<HomeScreenRoute> {
+                        HomeScreen()
+                    }
+                    composable<CharacterDetailsScreenRoute> {
+                        CharacterDetailsScreen()
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MasterDetailShowCaseTheme {
-        Greeting("Android")
     }
 }
