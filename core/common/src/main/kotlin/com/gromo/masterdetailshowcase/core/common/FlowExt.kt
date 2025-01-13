@@ -697,77 +697,7 @@ fun <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17,
         )
     }
 
-inline fun <T> MutableStateFlow<Boolean>.withLoading(block: () -> T): T {
-    this.value = true
-
-    val result = block()
-
-    this.value = false
-
-    return result
-}
-
-// https://proandroiddev.com/from-rxjava-to-kotlin-flow-throttling-ed1778847619
-// debounce emitting the first element then wait for emitting the next
-// the usual debounce avoid the first element
-@OptIn(InternalCoroutinesApi::class)
-fun <T> Flow<T>.throttleFirst(periodMillis: Long): Flow<T> {
-    if (periodMillis == 0L) return this
-
-    return flow {
-        var lastTime = 0L
-        collect { value ->
-            val currentTime = System.currentTimeMillis()
-            if (currentTime - lastTime >= periodMillis) {
-                lastTime = currentTime
-                emit(value)
-            }
-        }
-    }
-}
-
-fun <T, M> StateFlow<T>.mapToState(
-    coroutineScope: CoroutineScope,
-    started: SharingStarted,
-    mapper: (value: T) -> M
-): StateFlow<M> {
-    return map {
-        mapper(it)
-    }.stateIn(
-        coroutineScope,
-        started,
-        mapper(value)
-    )
-}
-
-data class DataWithPrevious<T>(
-    val previous: T?,
-    val new: T
-)
-
-@OptIn(InternalCoroutinesApi::class)
-fun <T : Any> Flow<T>.withPrevious(): Flow<DataWithPrevious<T>> = flow {
-    var prev: T? = null
-    this@withPrevious.collect {
-        emit(
-            DataWithPrevious<T>(
-                previous = prev,
-                new = it,
-            )
-        )
-        prev = it
-    }
-}
-
 fun <T> Flow<T>.stateIn(
     scope: CoroutineScope,
     initialValue: T
 ) = stateIn(scope = scope, started = SharingStarted.Eagerly, initialValue = initialValue)
-
-@OptIn(ExperimentalCoroutinesApi::class)
-fun <T> Flow<T?>.ifNullFlatMap(flow: () -> Flow<T?>): Flow<T?> {
-    return this.flatMapLatest {
-        if (it != null) flowOf(it)
-        else flow()
-    }
-}

@@ -3,22 +3,22 @@ package com.gromo.masterdetailshowcase.core.persistence.api_impl
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.gromo.masterdetailshowcase.core.persistence.api.daos.CountryDao
-import com.gromo.masterdetailshowcase.core.persistence.api.entities.CountryEntityModel
+import com.gromo.masterdetailshowcase.core.persistence.api.daos.CharacterDao
+import com.gromo.masterdetailshowcase.core.persistence.api.entities.CharacterEntityModel
 import com.gromo.masterdetailshowcase.core.persistence.api_impl.PersistentDataBase.Companion.DB_VERSION
 import com.gromo.masterdetailshowcase.core.persistence.api_impl.converters.Converters
 
 
 @Database(
     entities = [
-        CountryEntityModel::class,
+        CharacterEntityModel::class,
     ],
     exportSchema = true, version = DB_VERSION
 )
 @TypeConverters(Converters::class)
 internal abstract class PersistentDataBase : RoomDatabase() {
 
-    abstract fun countryDao(): CountryDao
+    abstract fun characterDao(): CharacterDao
 
     companion object {
         const val DB_VERSION = 1

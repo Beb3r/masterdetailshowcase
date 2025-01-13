@@ -1,6 +1,6 @@
 package com.gromo.masterdetailshowcase.core.network.api_impl
 
-import com.gromo.masterdetailshowcase.core.network.api.services.CountriesApiService
+import com.gromo.masterdetailshowcase.core.network.api.services.CharactersApiService
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -17,6 +17,7 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val networkModule = module {
+
     single {
         HttpClient(Android) {
             install(ContentNegotiation) {
@@ -30,6 +31,7 @@ val networkModule = module {
                 headers {
                     append(HttpHeaders.ContentType, ContentType.Application.Json)
                 }
+                url("https://rickandmortyapi.com/api/")
             }
 
             install(Logging) {
@@ -38,5 +40,5 @@ val networkModule = module {
         }
     }
 
-    singleOf(::CountriesApiService)
+    singleOf(::CharactersApiService)
 }

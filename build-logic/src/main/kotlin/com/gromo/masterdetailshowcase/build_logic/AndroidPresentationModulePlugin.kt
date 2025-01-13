@@ -20,6 +20,7 @@ class AndroidPresentationModulePlugin : Plugin<Project> {
                 implementation(libs.androidx.material3)
                 implementation(libs.koin.compose.asProvider())
                 implementation(libs.koin.compose.navigation)
+                implementation(libs.kotlinx.collections.immutable)
             }
         }
     }

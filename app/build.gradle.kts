@@ -34,8 +34,8 @@ dependencies {
     implementation(projects.core.network.api)
     implementation(projects.core.network.apiImpl)
     implementation(projects.core.persistence.apiImpl)
-    implementation(projects.core.countries.data)
-    implementation(projects.core.countries.domain)
+    implementation(projects.core.characters.data)
+    implementation(projects.core.characters.domain)
     implementation(projects.features.home.presentation)
-    implementation(projects.features.movieDetails.presentation)
+    implementation(projects.features.characterDetails.presentation)
 }

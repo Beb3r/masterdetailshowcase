@@ -13,5 +13,5 @@ ksp {
 
 dependencies {
     implementation(projects.core.common)
-    implementation(projects.core.countries.domain)
+    implementation(projects.core.characters.domain)
 }

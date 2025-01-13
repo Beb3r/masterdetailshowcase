@@ -6,6 +6,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val databaseModule = module {
+
     single {
         Room
             .databaseBuilder(
@@ -16,5 +17,5 @@ val databaseModule = module {
             .fallbackToDestructiveMigrationOnDowngrade()
             .build()
     }
-    single { get<PersistentDataBase>().countryDao() }
+    single { get<PersistentDataBase>().characterDao() }
 }

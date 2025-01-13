@@ -2,88 +2,58 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "38fc3174a677ac44011112dd6dec4437",
+    "identityHash": "fc0707cb7ab60068346b1e8e0d18f1d9",
     "entities": [
       {
-        "tableName": "country",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `nameCommon` TEXT NOT NULL, `nameOfficial` TEXT NOT NULL, `independent` INTEGER NOT NULL, `unMember` INTEGER NOT NULL, `capital` TEXT NOT NULL, `altSpellings` TEXT NOT NULL, `continents` TEXT NOT NULL, `region` TEXT NOT NULL, `subregion` TEXT NOT NULL, `flagUrl` TEXT NOT NULL, `area` REAL NOT NULL, `population` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "tableName": "character",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `status` TEXT NOT NULL, `species` TEXT NOT NULL, `type` TEXT NOT NULL, `gender` TEXT NOT NULL, `imageUrl` TEXT NOT NULL, `episodes` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "nameCommon",
-            "columnName": "nameCommon",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "nameOfficial",
-            "columnName": "nameOfficial",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "independent",
-            "columnName": "independent",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "unMember",
-            "columnName": "unMember",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "capital",
-            "columnName": "capital",
+            "fieldPath": "name",
+            "columnName": "name",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "altSpellings",
-            "columnName": "altSpellings",
+            "fieldPath": "status",
+            "columnName": "status",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "continents",
-            "columnName": "continents",
+            "fieldPath": "species",
+            "columnName": "species",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "region",
-            "columnName": "region",
+            "fieldPath": "type",
+            "columnName": "type",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "subregion",
-            "columnName": "subregion",
+            "fieldPath": "gender",
+            "columnName": "gender",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "flagUrl",
-            "columnName": "flagUrl",
+            "fieldPath": "imageUrl",
+            "columnName": "imageUrl",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "area",
-            "columnName": "area",
-            "affinity": "REAL",
-            "notNull": true
-          },
-          {
-            "fieldPath": "population",
-            "columnName": "population",
-            "affinity": "INTEGER",
+            "fieldPath": "episodes",
+            "columnName": "episodes",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -100,7 +70,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '38fc3174a677ac44011112dd6dec4437')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fc0707cb7ab60068346b1e8e0d18f1d9')"
     ]
   }
 }

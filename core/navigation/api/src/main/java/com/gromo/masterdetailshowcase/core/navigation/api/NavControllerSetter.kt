@@ -5,5 +5,4 @@ import androidx.navigation.NavController
 interface NavControllerSetter {
 
     fun setController(navController: NavController)
-
 }

@@ -7,6 +7,7 @@ import kotlinx.coroutines.SupervisorJob
 import org.koin.dsl.module
 
 val commonModule = module {
+
     single {
         AppCoroutineDispatchers(
             io = Dispatchers.IO,
