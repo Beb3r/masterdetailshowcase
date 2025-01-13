@@ -21,11 +21,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gromo.masterdetailshowcase.features.home.presentation.models.CharacterUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeViewStateUiModel
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -115,5 +117,55 @@ fun HomeContentError() {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+    )
+}
+
+@Composable
+@Preview
+fun HomeContentPreviewEmpty() {
+    HomeContent(
+        viewState = HomeViewStateUiModel.Empty(
+            isRefreshing = false,
+            onRefreshTriggered = {}
+        ),
+        innerPadding = PaddingValues(16.dp)
+    )
+}
+
+@Composable
+@Preview
+fun HomeContentPreviewError() {
+    HomeContent(
+        viewState = HomeViewStateUiModel.Error(
+            isRefreshing = false,
+            onRefreshTriggered = {}
+        ),
+        innerPadding = PaddingValues(16.dp)
+    )
+}
+
+@Composable
+@Preview
+fun HomeContentPreviewFilled() {
+    HomeContent(
+        viewState = HomeViewStateUiModel.Filled(
+            isRefreshing = false,
+            onRefreshTriggered = {},
+            characters = listOf(
+                CharacterUiModel(
+                    id = 1,
+                    name = "Rick",
+                    imageUrl = "",
+                    onClick = {}
+                ),
+                CharacterUiModel(
+                    id = 2,
+                    name = "Morty",
+                    imageUrl = "",
+                    onClick = {}
+                ),
+            ).toPersistentList()
+        ),
+        innerPadding = PaddingValues(16.dp)
     )
 }
