@@ -7,6 +7,8 @@ import com.gromo.masterdetailshowcase.core.characters.domain.di.CharactersDomain
 import com.gromo.masterdetailshowcase.core.navigation.api_impl.di.navigationModule
 import com.gromo.masterdetailshowcase.core.network.api_impl.networkModule
 import com.gromo.masterdetailshowcase.core.persistence.api_impl.di.databaseModule
+import com.gromo.masterdetailshowcase.core.session.data.di.SessionDataModule
+import com.gromo.masterdetailshowcase.core.session.domain.di.SessionDomainModule
 import com.gromo.masterdetailshowcase.features.home.presentation.di.HomePresentationModule
 import com.gromo.masterdetailshowcase.features.character_details.presentation.di.CharacterDetailsPresentationModule
 import org.koin.android.ext.koin.androidContext
@@ -34,6 +36,8 @@ class AppApplication : Application() {
                 HomePresentationModule().module,
                 navigationModule,
                 networkModule,
+                SessionDataModule().module,
+                SessionDomainModule().module,
             )
         }
     }

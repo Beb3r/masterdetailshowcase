@@ -12,7 +12,11 @@ ksp {
 }
 
 dependencies {
-    implementation(projects.core.common)
+    implementation(libs.haze)
+
     implementation(projects.core.characters.domain)
+    implementation(projects.core.common)
+    implementation(projects.core.design)
+    implementation(projects.core.session.domain)
     implementation(projects.features.home.navigation)
 }

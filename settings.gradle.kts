@@ -1,5 +1,17 @@
 @file:Suppress("UnstableApiUsage")
 
+include(":core:session:data")
+
+
+include(":core:session:domain")
+
+
+include(":core:session")
+
+
+include(":core:design")
+
+
 include(":features:character-details:navigation")
 
 

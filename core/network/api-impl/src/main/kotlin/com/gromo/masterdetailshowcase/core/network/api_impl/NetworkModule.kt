@@ -35,7 +35,7 @@ val networkModule = module {
             }
 
             install(Logging) {
-                level = LogLevel.HEADERS
+                level = LogLevel.INFO
             }
         }
     }

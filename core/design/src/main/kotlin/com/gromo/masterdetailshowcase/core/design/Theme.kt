@@ -1,6 +1,5 @@
-package com.gromo.masterdetailshowcase.ui.theme
+package com.gromo.masterdetailshowcase.core.design
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

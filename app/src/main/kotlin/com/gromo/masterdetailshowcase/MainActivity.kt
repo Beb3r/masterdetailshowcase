@@ -15,7 +15,7 @@ import com.gromo.masterdetailshowcase.features.character_details.navigation.Char
 import com.gromo.masterdetailshowcase.features.character_details.presentation.CharacterDetailsScreen
 import com.gromo.masterdetailshowcase.features.home.navigation.HomeScreenRoute
 import com.gromo.masterdetailshowcase.features.home.presentation.HomeScreen
-import com.gromo.masterdetailshowcase.ui.theme.MasterDetailShowCaseTheme
+import com.gromo.masterdetailshowcase.core.design.MasterDetailShowCaseTheme
 import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {

@@ -1,4 +1,4 @@
-package com.gromo.masterdetailshowcase.ui.theme
+package com.gromo.masterdetailshowcase.core.design
 
 import androidx.compose.ui.graphics.Color
 

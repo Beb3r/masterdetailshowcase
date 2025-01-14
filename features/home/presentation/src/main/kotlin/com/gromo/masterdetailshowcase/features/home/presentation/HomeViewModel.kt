@@ -7,10 +7,11 @@ import com.gromo.masterdetailshowcase.core.characters.domain.use_cases.ObserveAl
 import com.gromo.masterdetailshowcase.core.common.combines
 import com.gromo.masterdetailshowcase.core.common.dispatchers.AppCoroutineDispatchers
 import com.gromo.masterdetailshowcase.core.common.stateIn
+import com.gromo.masterdetailshowcase.core.session.domain.use_cases.ObserveHasSeenOnboardingUseCase
+import com.gromo.masterdetailshowcase.core.session.domain.use_cases.SetHasSeenOnboardingUseCase
 import com.gromo.masterdetailshowcase.features.home.navigation.HomeNavigation
-import com.gromo.masterdetailshowcase.features.home.presentation.mappers.toUiModel
+import com.gromo.masterdetailshowcase.features.home.presentation.mappers.toHomeViewState
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeViewStateUiModel
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,56 +24,52 @@ import timber.log.Timber
 @KoinViewModel
 class HomeViewModel(
     observeAllCharactersUseCase: ObserveAllCharactersUseCase,
+    observeHasSeenOnboardingUseCase: ObserveHasSeenOnboardingUseCase,
     private val coroutineDispatcher: AppCoroutineDispatchers,
     private val fetchAllCharactersUseCase: FetchAllCharactersUseCase,
     private val navigation: HomeNavigation,
+    private val setHasSeenOnboardingUseCase: SetHasSeenOnboardingUseCase,
 ) : ViewModel() {
 
     private val fetchErrorFlow = MutableStateFlow<Throwable?>(null)
     private val isRefreshingFlow = MutableStateFlow(false)
+    private val shouldShowOnboardingFromUserFlow = MutableStateFlow(false)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val viewState: StateFlow<HomeViewStateUiModel> =
         combines(
             observeAllCharactersUseCase(),
+            observeHasSeenOnboardingUseCase(),
+            shouldShowOnboardingFromUserFlow,
             fetchErrorFlow,
             isRefreshingFlow,
-        ).mapLatest { (characters, fetchError, isRefreshing) ->
+        ).mapLatest { (characters, hasSeenOnboarding, shouldShowOnboardingFromUser, fetchError, isRefreshing) ->
             Timber.d("Characters: $characters")
-            when {
-                characters.isEmpty() -> {
-                    if (fetchError != null) {
-                        HomeViewStateUiModel.Error(
-                            isRefreshing = isRefreshing,
-                            onRefreshTriggered = { fetchAllCharacters() }
-                        )
+            toHomeViewState(
+                isRefreshing = isRefreshing,
+                onRefreshTriggered = { fetchAllCharacters() },
+                hasSeenOnboarding = hasSeenOnboarding,
+                shouldShowOnboardingFromUser = shouldShowOnboardingFromUser,
+                onTopBarActionHelpClicked = {
+                    shouldShowOnboardingFromUserFlow.value = true
+                },
+                onTopBarActionCloseClicked = { fromUser ->
+                    if (fromUser) {
+                        shouldShowOnboardingFromUserFlow.value = false
                     } else {
-                        HomeViewStateUiModel.Empty(
-                            isRefreshing = isRefreshing,
-                            onRefreshTriggered = { fetchAllCharacters() }
-                        )
+                        setHasSeenOnboardingUseCase(hasSeen = true)
                     }
+                },
+                characters = characters,
+                fetchError = fetchError,
+                onCharacterClicked = { id ->
+                    onCharacterClicked(id = id)
                 }
-
-                else -> {
-                    HomeViewStateUiModel.Filled(
-                        isRefreshing = isRefreshing,
-                        onRefreshTriggered = { fetchAllCharacters() },
-                        characters = characters.map {
-                            it.toUiModel(
-                                onClick = { characterId -> onCharacterClicked(characterId) }
-                            )
-                        }.toPersistentList()
-                    )
-                }
-            }
+            )
         }.flowOn(coroutineDispatcher.main)
             .stateIn(
                 scope = viewModelScope,
-                initialValue = HomeViewStateUiModel.Empty(
-                    isRefreshing = false,
-                    onRefreshTriggered = { fetchAllCharacters() }
-                )
+                initialValue = HomeViewStateUiModel.DEFAULT
             )
 
 
