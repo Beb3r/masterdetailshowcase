@@ -1,6 +1,7 @@
 package com.gromo.masterdetailshowcase.features.character_details.presentation
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gromo.masterdetailshowcase.core.design.AppImage
 import com.gromo.masterdetailshowcase.core.design.Spacing16
+import com.gromo.masterdetailshowcase.core.design.Spacing2
 import com.gromo.masterdetailshowcase.core.design.Spacing24
 import com.gromo.masterdetailshowcase.core.design.Spacing8
 import com.gromo.masterdetailshowcase.features.character_details.presentation.models.CharacterDetailsViewStateUiModel
@@ -113,9 +115,13 @@ fun CharacterDetailsContent(
                 .padding(Spacing24)
                 .fillMaxWidth()
                 .border(
-                    width = 2.dp, color = Color.White, shape = RoundedCornerShape(
-                        Spacing8
-                    )
+                    width = Spacing2,
+                    color = if (isSystemInDarkTheme()) {
+                        Color.White
+                    } else {
+                        Color.Black
+                    },
+                    shape = RoundedCornerShape(size = Spacing8)
                 )
                 .padding(Spacing16)
         ) {

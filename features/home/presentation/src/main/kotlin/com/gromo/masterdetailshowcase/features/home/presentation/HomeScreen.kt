@@ -33,6 +33,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -133,7 +134,9 @@ fun HomeContent(viewState: HomeViewStateUiModel, hazeState: HazeState) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         PullToRefreshBox(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = Spacing8),
             isRefreshing = viewState.isRefreshing,
             onRefresh = viewState.onRefreshTriggered,
         ) {
@@ -159,9 +162,7 @@ fun HomeContentFilled(
         (LocalConfiguration.current.screenWidthDp.toFloat() / 2f) - Spacing24.value
 
     LazyVerticalGrid(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = Spacing8, end = Spacing8),
+        modifier = Modifier.fillMaxWidth(),
         columns = GridCells.Adaptive(requiredCellSize.dp),
         state = gridState,
     ) {
@@ -193,10 +194,11 @@ fun HomeContentFilled(
 fun BoxScope.HomeContentEmpty() {
     Text(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(Spacing16)
             .align(Alignment.Center),
-        text = stringResource(translations.home_empty_title)
+        text = stringResource(translations.home_empty_title),
+        textAlign = TextAlign.Center,
     )
 }
 
@@ -204,10 +206,11 @@ fun BoxScope.HomeContentEmpty() {
 fun BoxScope.HomeContentError() {
     Text(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(Spacing16)
             .align(Alignment.Center),
-        text = stringResource(translations.home_error_title)
+        text = stringResource(translations.home_error_title),
+        textAlign = TextAlign.Center,
     )
 }
 
