@@ -23,8 +23,8 @@ import timber.log.Timber
 @KoinViewModel
 class CharacterDetailsViewModel(
     handle: SavedStateHandle,
+    coroutineDispatcher: AppCoroutineDispatchers,
     private val observeCharacterByIdUseCase: ObserveCharacterByIdUseCase,
-    private val coroutineDispatcher: AppCoroutineDispatchers,
     private val navigation: CharacterDetailsNavigation,
 ) : ViewModel() {
 
@@ -33,8 +33,8 @@ class CharacterDetailsViewModel(
         flowOf(handle.toRoute<CharacterDetailsScreenRoute>().id).flatMapLatest {
             observeCharacterByIdUseCase(it)
         }.mapLatest { character ->
-            Timber.d("Character: $character")
             if (character == null) {
+                // display error message and navigate back
                 CharacterDetailsViewStateUiModel.DEFAULT
             } else {
                 CharacterDetailsViewStateUiModel(

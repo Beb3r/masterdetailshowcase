@@ -12,12 +12,12 @@ data class CharacterDomainModel(
 ) {
 
     companion object {
-        const val DEFAULT_NAME = ""
-        const val DEFAULT_STATUS = ""
-        const val DEFAULT_SPECIES = ""
-        const val DEFAULT_TYPE = ""
-        const val DEFAULT_GENDER = ""
-        const val DEFAULT_IMAGE_URL = ""
+        const val DEFAULT_NAME = "-"
+        const val DEFAULT_STATUS = "-"
+        const val DEFAULT_SPECIES = "-"
+        const val DEFAULT_TYPE = "-"
+        const val DEFAULT_GENDER = "-"
+        const val DEFAULT_IMAGE_URL = "-"
         val DEFAULT_EPISODES = listOf<String>()
     }
 }
