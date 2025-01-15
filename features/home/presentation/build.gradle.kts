@@ -18,5 +18,6 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.core.design)
     implementation(projects.core.session.domain)
+    implementation(projects.core.translations)
     implementation(projects.features.home.navigation)
 }

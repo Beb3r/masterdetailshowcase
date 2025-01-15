@@ -15,5 +15,6 @@ android {
 dependencies {
     implementation(libs.bundles.room)
     ksp(libs.room.ksp)
+
     implementation(projects.core.persistence.api)
 }

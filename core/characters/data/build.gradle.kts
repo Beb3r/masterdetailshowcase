@@ -7,9 +7,10 @@ android {
 }
 
 dependencies{
+    implementation(libs.bundles.ktor)
+
     implementation(projects.core.common)
     implementation(projects.core.characters.domain)
     implementation(projects.core.network.api)
     implementation(projects.core.persistence.api)
-    implementation(libs.bundles.ktor)
 }

@@ -44,7 +44,6 @@ class HomeViewModel(
             fetchErrorFlow,
             isRefreshingFlow,
         ).mapLatest { (characters, hasSeenOnboarding, shouldShowOnboardingFromUser, fetchError, isRefreshing) ->
-            Timber.d("Characters: $characters")
             toHomeViewState(
                 isRefreshing = isRefreshing,
                 onRefreshTriggered = { fetchAllCharacters() },

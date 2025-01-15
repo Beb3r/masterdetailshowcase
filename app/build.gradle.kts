@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.gromo.masterdetailshowcase"
-
+        resourceConfigurations.addAll(listOf("en", "fr"))
     }
 
     buildFeatures {
@@ -29,7 +29,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // modules
     implementation(projects.core.characters.data)
     implementation(projects.core.characters.domain)
     implementation(projects.core.common)
@@ -41,6 +40,7 @@ dependencies {
     implementation(projects.core.persistence.apiImpl)
     implementation(projects.core.session.data)
     implementation(projects.core.session.domain)
+    implementation(projects.core.translations)
     implementation(projects.features.characterDetails.navigation)
     implementation(projects.features.characterDetails.presentation)
     implementation(projects.features.home.navigation)

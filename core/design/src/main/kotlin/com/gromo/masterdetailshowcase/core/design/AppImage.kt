@@ -9,6 +9,7 @@ import coil3.compose.AsyncImage
 @Composable
 fun AppImage(
     modifier: Modifier = Modifier,
+    contentDescription: String,
     url: String,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
@@ -16,7 +17,7 @@ fun AppImage(
     AsyncImage(
         modifier = modifier,
         model = url,
-        contentDescription = "AppImage",
+        contentDescription = contentDescription,
         alignment = alignment,
         contentScale = contentScale,
     )

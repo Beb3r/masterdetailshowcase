@@ -1,23 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-include(":core:session:data")
-
-
-include(":core:session:domain")
-
-
-include(":core:session")
-
-
-include(":core:design")
-
-
-include(":features:character-details:navigation")
-
-
-include(":features:home:navigation")
-
-
 pluginManagement {
     includeBuild("build-logic")
     repositories {
@@ -43,19 +25,27 @@ dependencyResolutionManagement {
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "MasterDetailShowCase"
+
 include(":app")
 include(":core:common")
 include(":core:characters")
 include(":core:characters:domain")
 include(":core:characters:data")
-include(":features:home")
-include(":features:home:presentation")
-include(":features:character-details")
-include(":features:character-details:presentation")
+include(":core:design")
 include(":core:navigation")
+include(":core:navigation:api-impl")
+include(":core:navigation:api")
 include(":core:network:api")
 include(":core:network:api-impl")
 include(":core:persistence:api")
 include(":core:persistence:api-impl")
-include(":core:navigation:api-impl")
-include(":core:navigation:api")
+include(":core:session")
+include(":core:session:data")
+include(":core:session:domain")
+include(":core:translations")
+include(":features:home")
+include(":features:home:navigation")
+include(":features:home:presentation")
+include(":features:character-details")
+include(":features:character-details:navigation")
+include(":features:character-details:presentation")

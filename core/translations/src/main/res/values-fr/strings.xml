@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_empty_title">Aucun personnages trouvés</string>
+    <string name="home_error_title">Hmm patience, on répare tout ca</string>
+    <string name="home_onboarding_title">Bienvenue sur Rick &amp; Morty!</string>
+    <string name="home_onboarding_subtitle"> Cette app est une démo pour montrer les bonnes pratiques autour de la clean architecture et de la modularisation. Ne faites pas attention au design, ce n’est pas son but (et ce n’est pas mon job non plus)</string>
+</resources>

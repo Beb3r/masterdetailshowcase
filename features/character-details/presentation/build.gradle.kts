@@ -18,5 +18,6 @@ dependencies {
     implementation(projects.core.design)
     implementation(projects.core.characters.domain)
     implementation(projects.core.navigation.api)
+    implementation(projects.core.translations)
     implementation(projects.features.characterDetails.navigation)
 }

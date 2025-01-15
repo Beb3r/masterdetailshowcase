@@ -1,14 +1,11 @@
 package com.gromo.masterdetailshowcase.features.home.presentation
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,34 +29,30 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gromo.masterdetailshowcase.core.design.AppImage
 import com.gromo.masterdetailshowcase.core.design.Spacing16
 import com.gromo.masterdetailshowcase.core.design.Spacing24
-import com.gromo.masterdetailshowcase.core.design.Spacing48
 import com.gromo.masterdetailshowcase.core.design.Spacing8
+import com.gromo.masterdetailshowcase.features.home.presentation.composables.HomeOnboarding
 import com.gromo.masterdetailshowcase.features.home.presentation.models.CharacterUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeCharacterListViewStateUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeOnboardingViewStateUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeTopBarActionViewStateUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeViewStateUiModel
 import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.HazeStyle
-import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.androidx.compose.koinViewModel
 import com.gromo.masterdetailshowcase.core.design.R.drawable as drawables
+import com.gromo.masterdetailshowcase.core.translations.R.string as translations
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,7 +73,7 @@ fun HomeScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Rick & Morty",
+                        text = stringResource(translations.home_title),
                     )
                 },
                 actions = {
@@ -120,8 +113,14 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            HomeContent(viewState = viewState, hazeState = hazeState)
-            HomeOnboardingContent(viewState = viewState.onboardingViewState, hazeState = hazeState)
+            HomeContent(
+                viewState = viewState,
+                hazeState = hazeState
+            )
+            HomeOnboarding(
+                viewState = viewState.onboardingViewState,
+                hazeState = hazeState
+            )
         }
     }
 }
@@ -134,14 +133,17 @@ fun HomeContent(viewState: HomeViewStateUiModel, hazeState: HazeState) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         PullToRefreshBox(
+            modifier = Modifier.fillMaxWidth(),
             isRefreshing = viewState.isRefreshing,
             onRefresh = viewState.onRefreshTriggered,
-            modifier = Modifier.fillMaxWidth(),
         ) {
             when (val characterListViewState = viewState.characterListViewState) {
                 is HomeCharacterListViewStateUiModel.Empty -> HomeContentEmpty()
                 is HomeCharacterListViewStateUiModel.Error -> HomeContentError()
-                is HomeCharacterListViewStateUiModel.Filled -> HomeContentFilled(characters = characterListViewState.characters)
+                is HomeCharacterListViewStateUiModel.Filled ->
+                    HomeContentFilled(
+                        characters = characterListViewState.characters
+                    )
             }
         }
 
@@ -173,13 +175,14 @@ fun HomeContentFilled(
                 }
             ) {
                 AppImage(
-                    url = character.imageUrl,
                     modifier = Modifier.fillMaxWidth(),
+                    contentDescription = "home_character_image_${character.id}",
+                    url = character.imageUrl,
                     contentScale = ContentScale.Crop,
                 )
                 Text(
-                    text = character.name,
-                    modifier = Modifier.padding(Spacing16)
+                    modifier = Modifier.padding(Spacing16),
+                    text = character.name
                 )
             }
         }
@@ -187,84 +190,24 @@ fun HomeContentFilled(
 }
 
 @Composable
-fun HomeOnboardingContent(viewState: HomeOnboardingViewStateUiModel, hazeState: HazeState) {
-    Crossfade(
-        targetState = viewState,
-        label = "crossfade onboarding animation",
-    ) { targetState ->
-        if (targetState is HomeOnboardingViewStateUiModel.Visible) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .hazeEffect(
-                        state = hazeState,
-                        style = HazeStyle(
-                            backgroundColor = if (isSystemInDarkTheme()) {
-                                Color.Black
-                            } else {
-                                Color.White
-                            },
-                            tints = emptyList(),
-                            blurRadius = 20.dp
-                        )
-                    )
-                    .clickable {}
-            ) {
-                Card(
-                    modifier = Modifier
-                        .padding(Spacing48)
-                        .fillMaxWidth()
-                        .align(Alignment.Center),
-                ) {
-
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(Spacing24),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Image(
-                            painter = painterResource(drawables.logo_rick_and_morty),
-                            contentDescription = "logo"
-                        )
-
-                        Text(
-                            modifier = Modifier.padding(top = Spacing16),
-                            text = "Welcome to Rick & Morty!",
-                            fontSize = TextUnit(value = 20f, TextUnitType.Sp),
-                            textAlign = TextAlign.Center,
-                        )
-
-                        Text(
-                            modifier = Modifier.padding(top = Spacing16),
-                            text = "This is a demo app to showcase best practices around clean archicture and modularization. Please don't mind the design, it ain't its purpose",
-                            fontSize = TextUnit(value = 16f, TextUnitType.Sp),
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun HomeContentEmpty() {
+fun BoxScope.HomeContentEmpty() {
     Text(
-        text = "Empty",
         modifier = Modifier
             .fillMaxSize()
             .padding(Spacing16)
+            .align(Alignment.Center),
+        text = stringResource(translations.home_empty_title)
     )
 }
 
 @Composable
-fun HomeContentError() {
+fun BoxScope.HomeContentError() {
     Text(
-        text = "Error",
         modifier = Modifier
             .fillMaxSize()
             .padding(Spacing16)
+            .align(Alignment.Center),
+        text = stringResource(translations.home_error_title)
     )
 }
 
