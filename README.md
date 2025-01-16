@@ -1,4 +1,5 @@
 A small app showcasing modularisation and clean architecture principles.
+Displays a list of Rick & Morty TV show characters. Opens a details screen on click.
 
 Stack:
 - single activity + Compose
