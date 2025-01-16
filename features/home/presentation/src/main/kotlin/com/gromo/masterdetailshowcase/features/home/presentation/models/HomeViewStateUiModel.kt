@@ -2,6 +2,7 @@ package com.gromo.masterdetailshowcase.features.home.presentation.models
 
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.PersistentList
+import java.util.Objects
 
 @Immutable
 data class HomeViewStateUiModel(
@@ -11,6 +12,7 @@ data class HomeViewStateUiModel(
     val onboardingViewState: HomeOnboardingViewStateUiModel,
     val characterListViewState: HomeCharacterListViewStateUiModel,
 ) {
+
     companion object {
         val DEFAULT = HomeViewStateUiModel(
             isRefreshing = false,
@@ -24,16 +26,22 @@ data class HomeViewStateUiModel(
 
 @Immutable
 sealed interface HomeTopBarActionViewStateUiModel {
+
+    @Immutable
     data class Help(val onClick: () -> Unit) : HomeTopBarActionViewStateUiModel
+
+    @Immutable
     data class Close(val onClick: () -> Unit) : HomeTopBarActionViewStateUiModel
 }
 
 @Immutable
 sealed interface HomeCharacterListViewStateUiModel {
+
     data object Error : HomeCharacterListViewStateUiModel
 
     data object Empty : HomeCharacterListViewStateUiModel
 
+    @Immutable
     data class Filled(
         val characters: PersistentList<CharacterUiModel>
     ) : HomeCharacterListViewStateUiModel
@@ -45,7 +53,12 @@ data class CharacterUiModel(
     val name: String,
     val imageUrl: String,
     val onClick: (Int) -> Unit,
-)
+) {
+    override fun hashCode(): Int = Objects.hash(id, name, imageUrl)
+
+    override fun equals(other: Any?): Boolean =
+        other is CharacterUiModel && other.id == id && other.name == name && other.imageUrl == imageUrl
+}
 
 @Immutable
 sealed interface HomeOnboardingViewStateUiModel {
