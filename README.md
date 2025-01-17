@@ -13,4 +13,4 @@ Stack:
 - Timber
 
 Structure:
-![structure](https://github.com/user-attachments/assets/6efc9986-5551-4243-922f-12af422e8e7b)
+![structure](https://github.com/user-attachments/assets/54f5c593-e516-4852-b87e-8118c9a0369f)
