@@ -1,6 +1,7 @@
 package com.gromo.masterdetailshowcase.core.network.api_impl
 
 import com.gromo.masterdetailshowcase.core.network.api.services.CharactersApiService
+import com.gromo.masterdetailshowcase.core.network.api.services.EpisodesApiService
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -41,4 +42,6 @@ val networkModule = module {
     }
 
     singleOf(::CharactersApiService)
+
+    singleOf(::EpisodesApiService)
 }

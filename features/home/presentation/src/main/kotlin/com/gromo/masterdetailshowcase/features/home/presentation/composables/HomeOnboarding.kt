@@ -2,6 +2,7 @@ package com.gromo.masterdetailshowcase.features.home.presentation.composables
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -41,10 +42,11 @@ fun HomeOnboarding(viewState: HomeOnboardingViewStateUiModel, hazeState: HazeSta
             Box(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(color = targetState.overlayColor)
                     .hazeEffect(
                         state = hazeState,
                         style = HazeStyle(
-                            backgroundColor = if (isSystemInDarkTheme()) {
+                            backgroundColor =  if (isSystemInDarkTheme()) {
                                 Color.Black
                             } else {
                                 Color.White

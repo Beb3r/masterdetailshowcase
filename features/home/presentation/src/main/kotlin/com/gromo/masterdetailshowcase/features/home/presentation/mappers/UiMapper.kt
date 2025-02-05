@@ -1,23 +1,31 @@
 package com.gromo.masterdetailshowcase.features.home.presentation.mappers
 
+import android.os.Build
+import androidx.compose.ui.graphics.Color
 import com.gromo.masterdetailshowcase.core.characters.domain.models.CharacterDomainModel
+import com.gromo.masterdetailshowcase.core.episodes.domain.models.EpisodeDomainModel
+import com.gromo.masterdetailshowcase.features.home.domain.models.HomeDataDomainModel
+import com.gromo.masterdetailshowcase.features.home.presentation.HomeViewModel.FetchStatusUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.CharacterUiModel
+import com.gromo.masterdetailshowcase.features.home.presentation.models.EpisodeUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeCharacterListViewStateUiModel
+import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeEpisodeListViewStateUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeOnboardingViewStateUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeTopBarActionViewStateUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeViewStateUiModel
 import kotlinx.collections.immutable.toPersistentList
 
 fun toHomeViewState(
-    isRefreshing: Boolean,
     onRefreshTriggered: () -> Unit,
     hasSeenOnboarding: Boolean,
     onTopBarActionHelpClicked: () -> Unit,
     onTopBarActionCloseClicked: (Boolean) -> Unit,
     shouldShowOnboardingFromUser: Boolean,
-    characters: List<CharacterDomainModel>,
-    fetchError: Throwable?,
+    data: HomeDataDomainModel,
+    charactersFetchStatus: FetchStatusUiModel,
+    episodesFetchStatus: FetchStatusUiModel,
     onCharacterClicked: (Int) -> Unit,
+    onEpisodeClicked: (Int) -> Unit,
 ): HomeViewStateUiModel {
     val topBarActionViewState = getTopBarActionViewState(
         hasSeenOnboarding = hasSeenOnboarding,
@@ -29,18 +37,28 @@ fun toHomeViewState(
         hasSeenOnboarding = hasSeenOnboarding,
         shouldShowOnboardingFromUser = shouldShowOnboardingFromUser,
     )
-    val characterListView = getCharacterListViewState(
-        characters = characters,
-        fetchError = fetchError,
+    val characterListViewState = getCharacterListViewState(
+        characters = data.characters,
+        fetchStatus = charactersFetchStatus,
         onCharacterClicked = onCharacterClicked,
     )
 
+    val episodeListViewState = getEpisodeListViewState(
+        episodes = data.episodes,
+        fetchStatus = charactersFetchStatus,
+        onEpisodeClicked = onEpisodeClicked,
+    )
+
+    val isLoading = charactersFetchStatus is FetchStatusUiModel.Loading ||
+            episodesFetchStatus is FetchStatusUiModel.Loading
+
     return HomeViewStateUiModel(
-        isRefreshing = isRefreshing,
+        isRefreshing = isLoading,
         onRefreshTriggered = onRefreshTriggered,
         topBarActionViewState = topBarActionViewState,
         onboardingViewState = onboardingViewState,
-        characterListViewState = characterListView,
+        characterListViewState = characterListViewState,
+        episodeListViewState = episodeListViewState,
     )
 }
 
@@ -69,18 +87,27 @@ private fun getOnboardingViewState(
     shouldShowOnboardingFromUser: Boolean,
 ): HomeOnboardingViewStateUiModel =
     when {
-        !hasSeenOnboarding || shouldShowOnboardingFromUser -> HomeOnboardingViewStateUiModel.Visible
+        !hasSeenOnboarding || shouldShowOnboardingFromUser -> {
+            HomeOnboardingViewStateUiModel.Visible(
+                overlayColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    Color.Transparent
+                } else {
+                    Color.Black.copy(alpha = 0.5f)
+                },
+            )
+        }
+
         else -> HomeOnboardingViewStateUiModel.Hidden
     }
 
 private fun getCharacterListViewState(
     characters: List<CharacterDomainModel>,
-    fetchError: Throwable?,
-    onCharacterClicked: (Int) -> Unit
+    fetchStatus: FetchStatusUiModel,
+    onCharacterClicked: (Int) -> Unit,
 ): HomeCharacterListViewStateUiModel =
     when {
         characters.isEmpty() -> {
-            if (fetchError != null) {
+            if (fetchStatus is FetchStatusUiModel.Error) {
                 HomeCharacterListViewStateUiModel.Error
             } else {
                 HomeCharacterListViewStateUiModel.Empty
@@ -104,5 +131,38 @@ fun CharacterDomainModel.toUiModel(
     id = this.id,
     name = this.name,
     imageUrl = this.imageUrl,
+    onClick = onClick,
+)
+
+private fun getEpisodeListViewState(
+    episodes: List<EpisodeDomainModel>,
+    fetchStatus: FetchStatusUiModel,
+    onEpisodeClicked: (Int) -> Unit,
+): HomeEpisodeListViewStateUiModel =
+    when {
+        episodes.isEmpty() -> {
+            if (fetchStatus is FetchStatusUiModel.Error) {
+                HomeEpisodeListViewStateUiModel.Error
+            } else {
+                HomeEpisodeListViewStateUiModel.Empty
+            }
+        }
+
+        else -> {
+            HomeEpisodeListViewStateUiModel.Filled(
+                episodes = episodes.map {
+                    it.toUiModel(
+                        onClick = { episodeId -> onEpisodeClicked(episodeId) }
+                    )
+                }.toPersistentList()
+            )
+        }
+    }
+
+fun EpisodeDomainModel.toUiModel(
+    onClick: (Int) -> Unit,
+) = EpisodeUiModel(
+    id = this.id,
+    name = this.episode,
     onClick = onClick,
 )

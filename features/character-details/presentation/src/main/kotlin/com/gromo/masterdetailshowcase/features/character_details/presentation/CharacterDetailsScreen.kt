@@ -1,7 +1,5 @@
 package com.gromo.masterdetailshowcase.features.character_details.presentation
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,12 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gromo.masterdetailshowcase.core.design.AppImage
 import com.gromo.masterdetailshowcase.core.design.Spacing16
-import com.gromo.masterdetailshowcase.core.design.Spacing2
 import com.gromo.masterdetailshowcase.core.design.Spacing24
 import com.gromo.masterdetailshowcase.core.design.Spacing8
 import com.gromo.masterdetailshowcase.features.character_details.presentation.models.CharacterDetailsViewStateUiModel
@@ -77,7 +74,7 @@ fun CharacterDetailsScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent,
+                    containerColor = viewState.topBarColor,
                     titleContentColor = Color.Black,
                     navigationIconContentColor = Color.Black,
                 )
@@ -112,22 +109,15 @@ fun CharacterDetailsContent(
 
         LazyColumn(
             modifier = Modifier
-                .padding(Spacing24)
+                .padding(horizontal = Spacing24)
                 .fillMaxWidth()
-                .border(
-                    width = Spacing2,
-                    color = if (isSystemInDarkTheme()) {
-                        Color.White
-                    } else {
-                        Color.Black
-                    },
-                    shape = RoundedCornerShape(size = Spacing8)
-                )
-                .padding(Spacing16)
+
         ) {
             item {
                 Text(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = Spacing24),
                     text = stringResource(translations.character_details_name, viewState.name),
                     fontSize = 24.sp
                 )
@@ -138,7 +128,6 @@ fun CharacterDetailsContent(
                         .fillMaxWidth()
                         .padding(top = Spacing16),
                     text = stringResource(translations.character_details_status, viewState.status),
-                    fontSize = 18.sp
                 )
             }
 
@@ -148,7 +137,6 @@ fun CharacterDetailsContent(
                         .fillMaxWidth()
                         .padding(top = Spacing8),
                     text = stringResource(translations.character_details_type, viewState.type),
-                    fontSize = 18.sp
                 )
             }
 
@@ -158,7 +146,6 @@ fun CharacterDetailsContent(
                         .fillMaxWidth()
                         .padding(top = Spacing8),
                     text = stringResource(translations.character_details_gender, viewState.gender),
-                    fontSize = 18.sp
                 )
             }
 
@@ -168,13 +155,13 @@ fun CharacterDetailsContent(
                         .fillMaxWidth()
                         .padding(top = Spacing8),
                     text = stringResource(translations.character_details_appearances),
-                    fontSize = 18.sp
                 )
             }
             items(items = viewState.episodes, key = { it }) { episode ->
                 Text(
                     text = episode,
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    fontStyle = FontStyle.Italic,
                 )
             }
         }

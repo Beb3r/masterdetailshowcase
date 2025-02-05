@@ -9,6 +9,6 @@ class CharacterDetailsNavigationImpl(
 ) : CharacterDetailsNavigation {
 
     override fun navigateBack() {
-        navigationManager.navigate(NavigationCommand.NavigateUp)
+        navigationManager.navigate(command = NavigationCommand.NavigateUp)
     }
 }

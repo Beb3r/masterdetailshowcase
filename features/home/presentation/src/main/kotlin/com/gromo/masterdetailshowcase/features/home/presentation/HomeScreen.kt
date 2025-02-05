@@ -5,16 +5,19 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -36,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gromo.masterdetailshowcase.core.design.AppImage
 import com.gromo.masterdetailshowcase.core.design.Spacing16
@@ -43,7 +48,9 @@ import com.gromo.masterdetailshowcase.core.design.Spacing24
 import com.gromo.masterdetailshowcase.core.design.Spacing8
 import com.gromo.masterdetailshowcase.features.home.presentation.composables.HomeOnboarding
 import com.gromo.masterdetailshowcase.features.home.presentation.models.CharacterUiModel
+import com.gromo.masterdetailshowcase.features.home.presentation.models.EpisodeUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeCharacterListViewStateUiModel
+import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeEpisodeListViewStateUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeOnboardingViewStateUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeTopBarActionViewStateUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeViewStateUiModel
@@ -140,50 +147,68 @@ fun HomeContent(viewState: HomeViewStateUiModel, hazeState: HazeState) {
             isRefreshing = viewState.isRefreshing,
             onRefresh = viewState.onRefreshTriggered,
         ) {
-            when (val characterListViewState = viewState.characterListViewState) {
-                is HomeCharacterListViewStateUiModel.Empty -> HomeContentEmpty()
-                is HomeCharacterListViewStateUiModel.Error -> HomeContentError()
-                is HomeCharacterListViewStateUiModel.Filled ->
-                    HomeContentFilled(
-                        characters = characterListViewState.characters
-                    )
+            val gridState: LazyGridState = rememberLazyGridState()
+            val requiredCellSize =
+                (LocalConfiguration.current.screenWidthDp.toFloat() / 2f) - Spacing24.value
+
+            LazyVerticalGrid(
+                modifier = Modifier.fillMaxWidth(),
+                columns = GridCells.Adaptive(requiredCellSize.dp),
+                state = gridState,
+            ) {
+                homeEpisodeListContent(viewState.episodeListViewState)
+                homeCharacterListContent(viewState.characterListViewState)
             }
         }
-
     }
 }
 
-@Composable
-fun HomeContentFilled(
-    characters: PersistentList<CharacterUiModel>,
-) {
-    val gridState: LazyGridState = rememberLazyGridState()
-    val requiredCellSize =
-        (LocalConfiguration.current.screenWidthDp.toFloat() / 2f) - Spacing24.value
 
-    LazyVerticalGrid(
+fun LazyGridScope.homeEpisodeListContent(
+    viewState: HomeEpisodeListViewStateUiModel
+) {
+    item(span = {
+        GridItemSpan(maxLineSpan)
+    }) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                modifier = Modifier.padding(start = Spacing16),
+                text = stringResource(translations.home_episode_list_title),
+                fontSize = 20.sp,
+            )
+            when (viewState) {
+                is HomeEpisodeListViewStateUiModel.Filled ->
+                    HomeEpisodeListContentFilled(
+                        episodes = viewState.episodes
+                    )
+
+                is HomeEpisodeListViewStateUiModel.Empty -> HomeEpisodeListContentEmpty()
+                is HomeEpisodeListViewStateUiModel.Error -> HomeEpisodeListContentError()
+            }
+        }
+    }
+
+}
+
+@Composable
+fun HomeEpisodeListContentFilled(
+    episodes: PersistentList<EpisodeUiModel>,
+) {
+    LazyRow(
         modifier = Modifier.fillMaxWidth(),
-        columns = GridCells.Adaptive(requiredCellSize.dp),
-        state = gridState,
     ) {
-        items(items = characters, key = { it.id }) { character ->
+        items(items = episodes, key = { it.id }) { episode ->
             Card(
                 modifier = Modifier
                     .padding(Spacing8)
                     .fillMaxWidth(),
                 onClick = {
-                    character.onClick(character.id)
+                    episode.onClick(episode.id)
                 }
             ) {
-                AppImage(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentDescription = "home_character_image_${character.id}",
-                    url = character.imageUrl,
-                    contentScale = ContentScale.Crop,
-                )
                 Text(
                     modifier = Modifier.padding(Spacing16),
-                    text = character.name
+                    text = episode.name
                 )
             }
         }
@@ -191,25 +216,102 @@ fun HomeContentFilled(
 }
 
 @Composable
-fun BoxScope.HomeContentEmpty() {
+fun HomeEpisodeListContentEmpty() {
     Text(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(Spacing16)
-            .align(Alignment.Center),
-        text = stringResource(translations.home_empty_title),
+            .padding(Spacing16),
+        text = stringResource(translations.home_episode_list_empty),
         textAlign = TextAlign.Center,
     )
 }
 
 @Composable
-fun BoxScope.HomeContentError() {
+fun HomeEpisodeListContentError() {
     Text(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(Spacing16)
-            .align(Alignment.Center),
-        text = stringResource(translations.home_error_title),
+            .padding(Spacing16),
+        text = stringResource(translations.home_episode_list_error),
+        textAlign = TextAlign.Center,
+    )
+}
+
+fun LazyGridScope.homeCharacterListContent(
+    viewState: HomeCharacterListViewStateUiModel
+) {
+    item(span = {
+        GridItemSpan(maxLineSpan)
+    }) {
+        Text(
+            modifier = Modifier.padding(top = Spacing24, start = Spacing16),
+            text = stringResource(translations.home_character_list_title),
+            fontSize = 20.sp,
+        )
+    }
+    when (viewState) {
+        is HomeCharacterListViewStateUiModel.Filled ->
+            items(
+                items = viewState.characters,
+                key = { it.id }) { character ->
+                Card(
+                    modifier = Modifier
+                        .padding(Spacing8)
+                        .fillMaxWidth(),
+                    onClick = {
+                        character.onClick(character.id)
+                    }
+                ) {
+                    AppImage(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentDescription = "home_character_image_${character.id}",
+                        url = character.imageUrl,
+                        contentScale = ContentScale.Crop,
+                    )
+                    Text(
+                        modifier = Modifier.padding(Spacing16),
+                        text = character.name
+                    )
+                }
+            }
+
+        is HomeCharacterListViewStateUiModel.Empty -> {
+            item(span = {
+                GridItemSpan(maxLineSpan)
+            }) {
+                HomeCharacterListContentEmpty()
+            }
+
+        }
+
+        is HomeCharacterListViewStateUiModel.Error -> {
+            item(span = {
+                GridItemSpan(maxLineSpan)
+            }) {
+                HomeCharacterListContentError()
+            }
+        }
+    }
+}
+
+@Composable
+fun HomeCharacterListContentEmpty() {
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(Spacing16),
+        text = stringResource(translations.home_character_list_empty),
+        textAlign = TextAlign.Center,
+    )
+}
+
+@Composable
+fun HomeCharacterListContentError() {
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(Spacing16),
+        text = stringResource(translations.home_character_list_error),
         textAlign = TextAlign.Center,
     )
 }
@@ -226,6 +328,7 @@ fun HomeContentPreviewEmpty() {
             ),
             onboardingViewState = HomeOnboardingViewStateUiModel.Hidden,
             characterListViewState = HomeCharacterListViewStateUiModel.Empty,
+            episodeListViewState = HomeEpisodeListViewStateUiModel.Empty,
         ),
         hazeState = remember { HazeState() },
     )
@@ -243,6 +346,7 @@ fun HomeContentPreviewError() {
             ),
             onboardingViewState = HomeOnboardingViewStateUiModel.Hidden,
             characterListViewState = HomeCharacterListViewStateUiModel.Error,
+            episodeListViewState = HomeEpisodeListViewStateUiModel.Error,
         ),
         hazeState = remember { HazeState() },
     )
@@ -275,6 +379,20 @@ fun HomeContentPreviewFilled() {
                     ),
                 ),
             ),
+            episodeListViewState = HomeEpisodeListViewStateUiModel.Filled(
+                episodes = persistentListOf(
+                    EpisodeUiModel(
+                        id = 1,
+                        name = "S01E01",
+                        onClick = {}
+                    ),
+                    EpisodeUiModel(
+                        id = 2,
+                        name = "S01E02",
+                        onClick = {}
+                    ),
+                ),
+            )
         ),
         hazeState = remember { HazeState() },
     )
@@ -282,7 +400,7 @@ fun HomeContentPreviewFilled() {
 
 @Composable
 @Preview
-fun HomeOnboardinPreview() {
+fun HomeOnboardingPreview() {
     HomeContent(
         viewState = HomeViewStateUiModel(
             isRefreshing = false,
@@ -290,8 +408,9 @@ fun HomeOnboardinPreview() {
             topBarActionViewState = HomeTopBarActionViewStateUiModel.Close(
                 onClick = {}
             ),
-            onboardingViewState = HomeOnboardingViewStateUiModel.Visible,
+            onboardingViewState = HomeOnboardingViewStateUiModel.Visible(overlayColor = Color.Transparent),
             characterListViewState = HomeCharacterListViewStateUiModel.Empty,
+            episodeListViewState = HomeEpisodeListViewStateUiModel.Empty,
         ),
         hazeState = remember { HazeState() },
     )

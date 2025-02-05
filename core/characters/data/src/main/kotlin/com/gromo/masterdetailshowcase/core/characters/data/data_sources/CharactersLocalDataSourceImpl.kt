@@ -6,20 +6,21 @@ import com.gromo.masterdetailshowcase.core.characters.domain.data_sources.Charac
 import com.gromo.masterdetailshowcase.core.characters.domain.models.CharacterDomainModel
 import com.gromo.masterdetailshowcase.core.persistence.api.daos.CharacterDao
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Single
 
 @Single(binds = [CharactersLocalDataSource::class])
 class CharactersLocalDataSourceImpl(
-    private val characterDao: CharacterDao,
+    private val dao: CharacterDao,
 ) : CharactersLocalDataSource {
 
     override fun observeAllCharacters(): Flow<List<CharacterDomainModel>> =
-        characterDao.observeAll().map { it.map { country -> country.toDomainModel() } }
+        dao.observeAll().map { it.map { character -> character.toDomainModel() } }
 
     override fun observeCharacterById(id: Int): Flow<CharacterDomainModel?> =
-        characterDao.observeById(id = id).map { it?.toDomainModel() }
+        dao.observeById(id = id).map { it?.toDomainModel() }.distinctUntilChanged()
 
     override suspend fun saveCharacters(characters: List<CharacterDomainModel>) =
-        characterDao.saveCharacters(characters = characters.map { it.toEntityModel() })
+        dao.saveCharacters(characters = characters.map { it.toEntityModel() })
 }

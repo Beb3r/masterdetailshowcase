@@ -1,52 +1,59 @@
 package com.gromo.masterdetailshowcase.features.home.presentation
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gromo.masterdetailshowcase.core.characters.domain.use_cases.FetchAllCharactersUseCase
-import com.gromo.masterdetailshowcase.core.characters.domain.use_cases.ObserveAllCharactersUseCase
 import com.gromo.masterdetailshowcase.core.common.combines
 import com.gromo.masterdetailshowcase.core.common.dispatchers.AppCoroutineDispatchers
 import com.gromo.masterdetailshowcase.core.common.stateIn
+import com.gromo.masterdetailshowcase.core.episodes.domain.use_cases.FetchAllEpisodesUseCase
 import com.gromo.masterdetailshowcase.core.session.domain.use_cases.ObserveHasSeenOnboardingUseCase
 import com.gromo.masterdetailshowcase.core.session.domain.use_cases.SetHasSeenOnboardingUseCase
+import com.gromo.masterdetailshowcase.features.home.domain.use_cases.ObserveHomeDataUseCase
 import com.gromo.masterdetailshowcase.features.home.navigation.HomeNavigation
 import com.gromo.masterdetailshowcase.features.home.presentation.mappers.toHomeViewState
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeViewStateUiModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import timber.log.Timber
 
 @KoinViewModel
 class HomeViewModel(
-    observeAllCharactersUseCase: ObserveAllCharactersUseCase,
+    observeHomeDataUseCase: ObserveHomeDataUseCase,
     observeHasSeenOnboardingUseCase: ObserveHasSeenOnboardingUseCase,
     private val coroutineDispatcher: AppCoroutineDispatchers,
     private val fetchAllCharactersUseCase: FetchAllCharactersUseCase,
+    private val fetchAllEpisodesUseCase: FetchAllEpisodesUseCase,
     private val navigation: HomeNavigation,
     private val setHasSeenOnboardingUseCase: SetHasSeenOnboardingUseCase,
 ) : ViewModel() {
 
-    private val fetchErrorFlow = MutableStateFlow<Throwable?>(null)
-    private val isRefreshingFlow = MutableStateFlow(false)
+    private var fetchCharactersJob: Job? = null
+    private var fetchEpisodesJob: Job? = null
+
+    private val charactersFetchStatusFlow =
+        MutableStateFlow<FetchStatusUiModel>(FetchStatusUiModel.Idle)
+    private val episodesFetchStatusFlow =
+        MutableStateFlow<FetchStatusUiModel>(FetchStatusUiModel.Idle)
     private val shouldShowOnboardingFromUserFlow = MutableStateFlow(false)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val viewState: StateFlow<HomeViewStateUiModel> =
         combines(
-            observeAllCharactersUseCase(),
+            observeHomeDataUseCase(),
             observeHasSeenOnboardingUseCase(),
             shouldShowOnboardingFromUserFlow,
-            fetchErrorFlow,
-            isRefreshingFlow,
-        ).mapLatest { (characters, hasSeenOnboarding, shouldShowOnboardingFromUser, fetchError, isRefreshing) ->
+            charactersFetchStatusFlow,
+            episodesFetchStatusFlow,
+        ).mapLatest { (data, hasSeenOnboarding, shouldShowOnboardingFromUser, charactersFetchStatus, episodesFetchStatus) ->
             toHomeViewState(
-                isRefreshing = isRefreshing,
-                onRefreshTriggered = { fetchAllCharacters() },
+                onRefreshTriggered = { fetchData() },
                 hasSeenOnboarding = hasSeenOnboarding,
                 shouldShowOnboardingFromUser = shouldShowOnboardingFromUser,
                 onTopBarActionHelpClicked = {
@@ -59,39 +66,76 @@ class HomeViewModel(
                         setHasSeenOnboardingUseCase(hasSeen = true)
                     }
                 },
-                characters = characters,
-                fetchError = fetchError,
+                data = data,
+                charactersFetchStatus = charactersFetchStatus,
+                episodesFetchStatus = episodesFetchStatus,
                 onCharacterClicked = { id ->
                     onCharacterClicked(id = id)
-                }
+                },
+                onEpisodeClicked = { id ->
+                    onEpisodeClicked(id = id)
+                },
             )
-        }.flowOn(coroutineDispatcher.main)
-            .stateIn(
-                scope = viewModelScope,
-                initialValue = HomeViewStateUiModel.DEFAULT
-            )
+        }.stateIn(
+            scope = viewModelScope,
+            initialValue = HomeViewStateUiModel.DEFAULT,
+        )
 
 
     fun onViewInitialised() {
+        fetchData()
+    }
+
+    private fun fetchData() {
         fetchAllCharacters()
+        fetchAllEpisodes()
     }
 
     private fun fetchAllCharacters() {
-        viewModelScope.launch(coroutineDispatcher.io) {
-            isRefreshingFlow.value = true
+        fetchCharactersJob?.cancel()
+        fetchCharactersJob = viewModelScope.async(coroutineDispatcher.io) {
+            charactersFetchStatusFlow.value = FetchStatusUiModel.Loading
             fetchAllCharactersUseCase()
                 .onSuccess {
-                    isRefreshingFlow.value = false
+                    charactersFetchStatusFlow.value = FetchStatusUiModel.Idle
                 }
                 .onFailure { error ->
                     Timber.w("Error fetching characters: $error")
-                    isRefreshingFlow.value = false
-                    fetchErrorFlow.value = error
+                    charactersFetchStatusFlow.value = FetchStatusUiModel.Error
+                }
+        }
+    }
+
+
+    private fun fetchAllEpisodes() {
+        fetchEpisodesJob?.cancel()
+        fetchEpisodesJob = viewModelScope.async(coroutineDispatcher.io) {
+            episodesFetchStatusFlow.value = FetchStatusUiModel.Loading
+            fetchAllEpisodesUseCase()
+                .onSuccess {
+                    episodesFetchStatusFlow.value = FetchStatusUiModel.Idle
+                }
+                .onFailure { error ->
+                    Timber.w("Error fetching episodes: $error")
+                    episodesFetchStatusFlow.value = FetchStatusUiModel.Error
                 }
         }
     }
 
     private fun onCharacterClicked(id: Int) {
         navigation.navigateToCharacterDetails(id = id)
+    }
+
+    private fun onEpisodeClicked(id: Int) {
+        navigation.navigateToEpisodeDetails(id = id)
+    }
+
+    @Immutable
+    sealed interface FetchStatusUiModel {
+        data object Loading : FetchStatusUiModel
+        data object Idle : FetchStatusUiModel
+
+        @Immutable
+        data object Error : FetchStatusUiModel
     }
 }

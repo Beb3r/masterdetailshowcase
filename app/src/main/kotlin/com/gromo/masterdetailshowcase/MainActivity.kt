@@ -10,12 +10,14 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.gromo.masterdetailshowcase.core.design.MasterDetailShowCaseTheme
 import com.gromo.masterdetailshowcase.core.navigation.api.NavControllerAccessor
 import com.gromo.masterdetailshowcase.features.character_details.navigation.CharacterDetailsScreenRoute
 import com.gromo.masterdetailshowcase.features.character_details.presentation.CharacterDetailsScreen
+import com.gromo.masterdetailshowcase.features.episode_details.navigation.EpisodeDetailsScreenRoute
+import com.gromo.masterdetailshowcase.features.episode_details.presentation.EpisodeDetailsScreen
 import com.gromo.masterdetailshowcase.features.home.navigation.HomeScreenRoute
 import com.gromo.masterdetailshowcase.features.home.presentation.HomeScreen
-import com.gromo.masterdetailshowcase.core.design.MasterDetailShowCaseTheme
 import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {
@@ -47,6 +49,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable<CharacterDetailsScreenRoute> {
                         CharacterDetailsScreen()
+                    }
+                    composable<EpisodeDetailsScreenRoute> {
+                        EpisodeDetailsScreen()
                     }
                 }
             }

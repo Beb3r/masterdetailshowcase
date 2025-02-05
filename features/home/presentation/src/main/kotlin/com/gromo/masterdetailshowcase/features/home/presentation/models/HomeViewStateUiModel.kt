@@ -1,6 +1,7 @@
 package com.gromo.masterdetailshowcase.features.home.presentation.models
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.Color
 import kotlinx.collections.immutable.PersistentList
 import java.util.Objects
 
@@ -11,6 +12,7 @@ data class HomeViewStateUiModel(
     val topBarActionViewState: HomeTopBarActionViewStateUiModel,
     val onboardingViewState: HomeOnboardingViewStateUiModel,
     val characterListViewState: HomeCharacterListViewStateUiModel,
+    val episodeListViewState: HomeEpisodeListViewStateUiModel,
 ) {
 
     companion object {
@@ -20,6 +22,7 @@ data class HomeViewStateUiModel(
             topBarActionViewState = HomeTopBarActionViewStateUiModel.Help(onClick = {}),
             onboardingViewState = HomeOnboardingViewStateUiModel.Hidden,
             characterListViewState = HomeCharacterListViewStateUiModel.Empty,
+            episodeListViewState = HomeEpisodeListViewStateUiModel.Empty,
         )
     }
 }
@@ -61,7 +64,33 @@ data class CharacterUiModel(
 }
 
 @Immutable
+sealed interface HomeEpisodeListViewStateUiModel {
+
+    data object Error : HomeEpisodeListViewStateUiModel
+
+    data object Empty : HomeEpisodeListViewStateUiModel
+
+    @Immutable
+    data class Filled(
+        val episodes: PersistentList<EpisodeUiModel>
+    ) : HomeEpisodeListViewStateUiModel
+}
+
+@Immutable
+data class EpisodeUiModel(
+    val id: Int,
+    val name: String,
+    val onClick: (Int) -> Unit,
+) {
+    override fun hashCode(): Int = Objects.hash(id, name)
+
+    override fun equals(other: Any?): Boolean =
+        other is CharacterUiModel && other.id == id && other.name == name
+}
+
+@Immutable
 sealed interface HomeOnboardingViewStateUiModel {
     data object Hidden : HomeOnboardingViewStateUiModel
-    data object Visible : HomeOnboardingViewStateUiModel
+    @Immutable
+    data class Visible(val overlayColor: Color) : HomeOnboardingViewStateUiModel
 }

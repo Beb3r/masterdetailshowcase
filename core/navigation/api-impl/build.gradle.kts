@@ -14,5 +14,6 @@ dependencies{
     implementation(projects.core.common)
     implementation(projects.core.navigation.api)
     implementation(projects.features.characterDetails.navigation)
+    implementation(projects.features.episodeDetails.navigation)
     implementation(projects.features.home.navigation)
 }

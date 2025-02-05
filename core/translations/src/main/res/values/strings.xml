@@ -3,8 +3,12 @@
     <string name="app_name" translatable="false">Master Details Showcase</string>
 
     <string name="home_title" translatable="false">Rick &amp; Morty</string>
-    <string name="home_empty_title">No character to show!</string>
-    <string name="home_error_title">Hmm hold on, we’ll be back once things are fixed</string>
+    <string name="home_episode_list_title">Episodes</string>
+    <string name="home_episode_list_empty">No episode to show!</string>
+    <string name="home_episode_list_error">Hmm something went wrong with them episodes</string>
+    <string name="home_character_list_title">Characters</string>
+    <string name="home_character_list_empty">No character to show!</string>
+    <string name="home_character_list_error">Hmm hold on, we’ll be back once things are fixed</string>
     <string name="home_onboarding_title">Welcome to Rick &amp; Morty!</string>
     <string name="home_onboarding_subtitle">This is a demo app to showcase best practices around clean architecture and modularization. Please don’t mind the design, it ain’t its purpose (and it’s not my job)</string>
 
@@ -13,4 +17,8 @@
     <string name="character_details_type">Type: %1$s</string>
     <string name="character_details_gender">Gender: %1$s</string>
     <string name="character_details_appearances">Appearances: </string>
+
+    <string name="episode_details_name">Name: %1$s</string>
+    <string name="episode_details_air_date">Air date: %1$s</string>
+    <string name="episode_details_cast">Cast: </string>
 </resources>

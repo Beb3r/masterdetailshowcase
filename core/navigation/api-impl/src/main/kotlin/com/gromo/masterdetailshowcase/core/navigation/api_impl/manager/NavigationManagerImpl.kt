@@ -5,6 +5,7 @@ import com.gromo.masterdetailshowcase.core.common.dispatchers.AppCoroutineDispat
 import com.gromo.masterdetailshowcase.core.navigation.api.NavControllerAccessor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapNotNull
@@ -17,6 +18,7 @@ class NavigationManagerImpl(
 
     private var navControllerFlow = MutableStateFlow<NavController?>(null)
     private val scope by lazy { CoroutineScope(SupervisorJob() + coroutineDispatchers.main) }
+
     override fun setController(navController: NavController) {
         this.navControllerFlow.update { navController }
     }

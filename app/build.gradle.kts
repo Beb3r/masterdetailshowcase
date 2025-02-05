@@ -33,6 +33,8 @@ dependencies {
     implementation(projects.core.characters.domain)
     implementation(projects.core.common)
     implementation(projects.core.design)
+    implementation(projects.core.episodes.data)
+    implementation(projects.core.episodes.domain)
     implementation(projects.core.navigation.api)
     implementation(projects.core.navigation.apiImpl)
     implementation(projects.core.network.api)
@@ -43,6 +45,9 @@ dependencies {
     implementation(projects.core.translations)
     implementation(projects.features.characterDetails.navigation)
     implementation(projects.features.characterDetails.presentation)
+    implementation(projects.features.episodeDetails.navigation)
+    implementation(projects.features.episodeDetails.presentation)
     implementation(projects.features.home.navigation)
+    implementation(projects.features.home.domain)
     implementation(projects.features.home.presentation)
 }
