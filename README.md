@@ -1,5 +1,5 @@
 A small app showcasing modularisation and clean architecture principles.
-Displays a list of Rick & Morty TV show characters. Opens a details screen on click.
+Displays a list of Rick & Morty TV show episodes & characters. Opens a details screen on click.
 
 Stack:
 - Single activity + Compose
@@ -13,4 +13,4 @@ Stack:
 - Timber
 
 Structure:
-![structure](https://github.com/user-attachments/assets/54f5c593-e516-4852-b87e-8118c9a0369f)
+![structure2](https://github.com/user-attachments/assets/23fb8d1f-b6bb-4861-8b11-d19d3bbac9bb)
