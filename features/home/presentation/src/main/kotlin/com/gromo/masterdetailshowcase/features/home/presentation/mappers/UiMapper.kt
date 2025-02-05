@@ -70,15 +70,18 @@ private fun getTopBarActionViewState(
 ): HomeTopBarActionViewStateUiModel =
     when {
         !hasSeenOnboarding -> HomeTopBarActionViewStateUiModel.Close(
-            onClick = { onTopBarActionCloseClicked(false) }
+            fromDefault = false,
+            onClick = { onTopBarActionCloseClicked(false) },
         )
 
         shouldShowOnboardingFromUser -> HomeTopBarActionViewStateUiModel.Close(
-            onClick = { onTopBarActionCloseClicked(true) }
+            fromDefault = false,
+            onClick = { onTopBarActionCloseClicked(true) },
         )
 
         else -> HomeTopBarActionViewStateUiModel.Help(
-            onClick = onTopBarActionHelpClicked
+            fromDefault = false,
+            onClick = onTopBarActionHelpClicked,
         )
     }
 

@@ -19,7 +19,9 @@ data class HomeViewStateUiModel(
         val DEFAULT = HomeViewStateUiModel(
             isRefreshing = false,
             onRefreshTriggered = {},
-            topBarActionViewState = HomeTopBarActionViewStateUiModel.Help(onClick = {}),
+            topBarActionViewState = HomeTopBarActionViewStateUiModel.Help(
+                fromDefault = true,
+                onClick = {}),
             onboardingViewState = HomeOnboardingViewStateUiModel.Hidden,
             characterListViewState = HomeCharacterListViewStateUiModel.Empty,
             episodeListViewState = HomeEpisodeListViewStateUiModel.Empty,
@@ -31,10 +33,22 @@ data class HomeViewStateUiModel(
 sealed interface HomeTopBarActionViewStateUiModel {
 
     @Immutable
-    data class Help(val onClick: () -> Unit) : HomeTopBarActionViewStateUiModel
+    data class Help(val fromDefault: Boolean, val onClick: () -> Unit) :
+        HomeTopBarActionViewStateUiModel {
+        override fun hashCode(): Int = Objects.hash(fromDefault)
+
+        override fun equals(other: Any?): Boolean =
+            other is Help && other.fromDefault == fromDefault
+    }
 
     @Immutable
-    data class Close(val onClick: () -> Unit) : HomeTopBarActionViewStateUiModel
+    data class Close(val fromDefault: Boolean, val onClick: () -> Unit) :
+        HomeTopBarActionViewStateUiModel {
+        override fun hashCode(): Int = Objects.hash(fromDefault)
+
+        override fun equals(other: Any?): Boolean =
+            other is Close && other.fromDefault == fromDefault
+    }
 }
 
 @Immutable
@@ -91,6 +105,7 @@ data class EpisodeUiModel(
 @Immutable
 sealed interface HomeOnboardingViewStateUiModel {
     data object Hidden : HomeOnboardingViewStateUiModel
+
     @Immutable
     data class Visible(val overlayColor: Color) : HomeOnboardingViewStateUiModel
 }

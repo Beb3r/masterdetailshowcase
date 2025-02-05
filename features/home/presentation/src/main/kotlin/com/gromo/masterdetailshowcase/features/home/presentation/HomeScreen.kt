@@ -324,7 +324,8 @@ fun HomeContentPreviewEmpty() {
             isRefreshing = false,
             onRefreshTriggered = {},
             topBarActionViewState = HomeTopBarActionViewStateUiModel.Help(
-                onClick = {}
+                fromDefault = false,
+                onClick = {},
             ),
             onboardingViewState = HomeOnboardingViewStateUiModel.Hidden,
             characterListViewState = HomeCharacterListViewStateUiModel.Empty,
@@ -342,7 +343,8 @@ fun HomeContentPreviewError() {
             isRefreshing = false,
             onRefreshTriggered = {},
             topBarActionViewState = HomeTopBarActionViewStateUiModel.Help(
-                onClick = {}
+                fromDefault = false,
+                onClick = {},
             ),
             onboardingViewState = HomeOnboardingViewStateUiModel.Hidden,
             characterListViewState = HomeCharacterListViewStateUiModel.Error,
@@ -360,7 +362,8 @@ fun HomeContentPreviewFilled() {
             isRefreshing = false,
             onRefreshTriggered = {},
             topBarActionViewState = HomeTopBarActionViewStateUiModel.Help(
-                onClick = {}
+                fromDefault = false,
+                onClick = {},
             ),
             onboardingViewState = HomeOnboardingViewStateUiModel.Hidden,
             characterListViewState = HomeCharacterListViewStateUiModel.Filled(
@@ -406,7 +409,8 @@ fun HomeOnboardingPreview() {
             isRefreshing = false,
             onRefreshTriggered = {},
             topBarActionViewState = HomeTopBarActionViewStateUiModel.Close(
-                onClick = {}
+                fromDefault = false,
+                onClick = {},
             ),
             onboardingViewState = HomeOnboardingViewStateUiModel.Visible(overlayColor = Color.Transparent),
             characterListViewState = HomeCharacterListViewStateUiModel.Empty,
