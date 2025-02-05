@@ -10,5 +10,5 @@ android {
 dependencies {
     implementation(libs.kotlinx.serialization)
 
-    implementation(projects.core.navigation.api)
+    implementation(projects.libraries.navigation.api)
 }

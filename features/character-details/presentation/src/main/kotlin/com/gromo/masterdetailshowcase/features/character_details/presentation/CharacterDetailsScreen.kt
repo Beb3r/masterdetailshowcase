@@ -25,18 +25,18 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.gromo.masterdetailshowcase.core.design.AppImage
-import com.gromo.masterdetailshowcase.core.design.Spacing16
-import com.gromo.masterdetailshowcase.core.design.Spacing24
-import com.gromo.masterdetailshowcase.core.design.Spacing8
+import com.gromo.masterdetailshowcase.libraries.design.AppImage
+import com.gromo.masterdetailshowcase.libraries.design.Spacing16
+import com.gromo.masterdetailshowcase.libraries.design.Spacing24
+import com.gromo.masterdetailshowcase.libraries.design.Spacing8
 import com.gromo.masterdetailshowcase.features.character_details.presentation.models.CharacterDetailsViewStateUiModel
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import org.koin.androidx.compose.koinViewModel
-import com.gromo.masterdetailshowcase.core.design.R.drawable as drawables
-import com.gromo.masterdetailshowcase.core.translations.R.string as translations
+import com.gromo.masterdetailshowcase.libraries.design.R.drawable as drawables
+import com.gromo.masterdetailshowcase.libraries.translations.R.string as translations
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

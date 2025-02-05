@@ -7,7 +7,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.characters.domain)
-    implementation(projects.core.common)
-    implementation(projects.core.episodes.domain)
+    implementation(projects.libraries.common)
+    implementation(projects.features.characters.domain)
+    implementation(projects.features.episodes.domain)
 }

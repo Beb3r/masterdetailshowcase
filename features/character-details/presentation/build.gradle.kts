@@ -10,10 +10,10 @@ android {
 dependencies {
     implementation(libs.haze)
 
-    implementation(projects.core.common)
-    implementation(projects.core.design)
-    implementation(projects.core.characters.domain)
-    implementation(projects.core.navigation.api)
-    implementation(projects.core.translations)
+    implementation(projects.libraries.common)
+    implementation(projects.libraries.design)
+    implementation(projects.libraries.navigation.api)
+    implementation(projects.libraries.translations)
+    implementation(projects.features.characters.domain)
     implementation(projects.features.characterDetails.navigation)
 }

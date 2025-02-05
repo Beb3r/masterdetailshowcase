@@ -22,15 +22,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import com.gromo.masterdetailshowcase.core.design.Spacing16
-import com.gromo.masterdetailshowcase.core.design.Spacing24
-import com.gromo.masterdetailshowcase.core.design.Spacing48
+import com.gromo.masterdetailshowcase.libraries.design.Spacing16
+import com.gromo.masterdetailshowcase.libraries.design.Spacing24
+import com.gromo.masterdetailshowcase.libraries.design.Spacing48
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeOnboardingViewStateUiModel
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.hazeEffect
-import com.gromo.masterdetailshowcase.core.design.R.drawable as drawables
-import com.gromo.masterdetailshowcase.core.translations.R.string as translations
+import com.gromo.masterdetailshowcase.libraries.design.R.drawable as drawables
+import com.gromo.masterdetailshowcase.libraries.translations.R.string as translations
 
 @Composable
 fun HomeOnboarding(viewState: HomeOnboardingViewStateUiModel, hazeState: HazeState) {

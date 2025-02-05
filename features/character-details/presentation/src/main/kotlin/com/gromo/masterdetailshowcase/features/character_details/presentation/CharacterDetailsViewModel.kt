@@ -6,9 +6,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.gromo.masterdetailshowcase.core.characters.domain.use_cases.ObserveCharacterByIdUseCase
-import com.gromo.masterdetailshowcase.core.common.dispatchers.AppCoroutineDispatchers
-import com.gromo.masterdetailshowcase.core.common.stateIn
+import com.gromo.masterdetailshowcase.features.characters.domain.use_cases.ObserveCharacterByIdUseCase
+import com.gromo.masterdetailshowcase.libraries.common.dispatchers.AppCoroutineDispatchers
+import com.gromo.masterdetailshowcase.libraries.common.stateIn
 import com.gromo.masterdetailshowcase.features.character_details.navigation.CharacterDetailsNavigation
 import com.gromo.masterdetailshowcase.features.character_details.navigation.CharacterDetailsScreenRoute
 import com.gromo.masterdetailshowcase.features.character_details.presentation.models.CharacterDetailsViewStateUiModel

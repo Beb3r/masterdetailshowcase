@@ -10,12 +10,12 @@ android {
 dependencies {
     implementation(libs.haze)
 
-    implementation(projects.core.characters.domain)
-    implementation(projects.core.common)
-    implementation(projects.core.design)
-    implementation(projects.core.episodes.domain)
-    implementation(projects.core.session.domain)
-    implementation(projects.core.translations)
+    implementation(projects.libraries.common)
+    implementation(projects.libraries.design)
+    implementation(projects.libraries.translations)
+    implementation(projects.features.characters.domain)
+    implementation(projects.features.episodes.domain)
     implementation(projects.features.home.domain)
     implementation(projects.features.home.navigation)
+    implementation(projects.features.session.domain)
 }

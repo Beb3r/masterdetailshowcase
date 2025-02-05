@@ -42,10 +42,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.gromo.masterdetailshowcase.core.design.AppImage
-import com.gromo.masterdetailshowcase.core.design.Spacing16
-import com.gromo.masterdetailshowcase.core.design.Spacing24
-import com.gromo.masterdetailshowcase.core.design.Spacing8
+import com.gromo.masterdetailshowcase.libraries.design.AppImage
+import com.gromo.masterdetailshowcase.libraries.design.Spacing16
+import com.gromo.masterdetailshowcase.libraries.design.Spacing24
+import com.gromo.masterdetailshowcase.libraries.design.Spacing8
 import com.gromo.masterdetailshowcase.features.home.presentation.composables.HomeOnboarding
 import com.gromo.masterdetailshowcase.features.home.presentation.models.CharacterUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.EpisodeUiModel
@@ -59,8 +59,8 @@ import dev.chrisbanes.haze.hazeSource
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.androidx.compose.koinViewModel
-import com.gromo.masterdetailshowcase.core.design.R.drawable as drawables
-import com.gromo.masterdetailshowcase.core.translations.R.string as translations
+import com.gromo.masterdetailshowcase.libraries.design.R.drawable as drawables
+import com.gromo.masterdetailshowcase.libraries.translations.R.string as translations
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

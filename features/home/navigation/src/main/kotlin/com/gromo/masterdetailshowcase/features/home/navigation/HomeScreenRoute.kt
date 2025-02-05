@@ -1,6 +1,6 @@
 package com.gromo.masterdetailshowcase.features.home.navigation
 
-import com.gromo.masterdetailshowcase.core.navigation.api.NavigationRoute
+import com.gromo.masterdetailshowcase.libraries.navigation.api.NavigationRoute
 import kotlinx.serialization.Serializable
 
 @Serializable

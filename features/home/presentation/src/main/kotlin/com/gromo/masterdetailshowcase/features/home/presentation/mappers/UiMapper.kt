@@ -2,8 +2,8 @@ package com.gromo.masterdetailshowcase.features.home.presentation.mappers
 
 import android.os.Build
 import androidx.compose.ui.graphics.Color
-import com.gromo.masterdetailshowcase.core.characters.domain.models.CharacterDomainModel
-import com.gromo.masterdetailshowcase.core.episodes.domain.models.EpisodeDomainModel
+import com.gromo.masterdetailshowcase.features.characters.domain.models.CharacterDomainModel
+import com.gromo.masterdetailshowcase.features.episodes.domain.models.EpisodeDomainModel
 import com.gromo.masterdetailshowcase.features.home.domain.models.HomeDataDomainModel
 import com.gromo.masterdetailshowcase.features.home.presentation.HomeViewModel.FetchStatusUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.CharacterUiModel
