@@ -1,7 +1,5 @@
 package com.gromo.masterdetailshowcase.core.network.api_impl
 
-import com.gromo.masterdetailshowcase.core.network.api.services.CharactersApiService
-import com.gromo.masterdetailshowcase.core.network.api.services.EpisodesApiService
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -14,34 +12,31 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.append
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Single
 
-val networkModule = module {
+@Module
+@ComponentScan("com.gromo.masterdetailshowcase.core.network")
+class NetworkModule
 
-    single {
-        HttpClient(Android) {
-            install(ContentNegotiation) {
-                json(Json {
-                    prettyPrint = true
-                    ignoreUnknownKeys = true
-                })
-            }
-
-            defaultRequest {
-                headers {
-                    append(HttpHeaders.ContentType, ContentType.Application.Json)
-                }
-                url("https://rickandmortyapi.com/api/")
-            }
-
-            install(Logging) {
-                level = LogLevel.INFO
-            }
-        }
+@Single
+internal fun provideHttpClient() = HttpClient(Android) {
+    install(ContentNegotiation) {
+        json(Json {
+            prettyPrint = true
+            ignoreUnknownKeys = true
+        })
     }
 
-    singleOf(::CharactersApiService)
+    defaultRequest {
+        headers {
+            append(HttpHeaders.ContentType, ContentType.Application.Json)
+        }
+        url("https://rickandmortyapi.com/api/")
+    }
 
-    singleOf(::EpisodesApiService)
+    install(Logging) {
+        level = LogLevel.INFO
+    }
 }

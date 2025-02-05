@@ -4,18 +4,26 @@ import com.gromo.masterdetailshowcase.core.common.dispatchers.AppCoroutineDispat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Single
 import org.koin.dsl.module
 
-val commonModule = module {
+@Module
+@ComponentScan("com.gromo.masterdetailshowcase.core.common")
+class CommonModule
 
-    single {
-        AppCoroutineDispatchers(
-            io = Dispatchers.IO,
-            computation = Dispatchers.Default,
-            main = Dispatchers.Main,
-        )
-    }
+@Single
+fun createDispatchers(): AppCoroutineDispatchers =
+    AppCoroutineDispatchers(
+        io = Dispatchers.IO,
+        computation = Dispatchers.Default,
+        main = Dispatchers.Main,
+    )
 
+@Factory
+fun createAppScope(): CoroutineScope {
     val supervisorJob = SupervisorJob()
-    factory { CoroutineScope(Dispatchers.IO + supervisorJob) }
+    return CoroutineScope(Dispatchers.IO + supervisorJob)
 }

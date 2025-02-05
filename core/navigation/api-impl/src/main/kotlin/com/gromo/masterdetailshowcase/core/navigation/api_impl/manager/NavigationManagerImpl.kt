@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Single
 
+@Single(binds = [NavigationManager::class, NavControllerAccessor::class])
 class NavigationManagerImpl(
     coroutineDispatchers: AppCoroutineDispatchers,
 ) : NavigationManager, NavControllerAccessor {

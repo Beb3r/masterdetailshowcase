@@ -5,7 +5,9 @@ import com.gromo.masterdetailshowcase.core.navigation.api_impl.manager.Navigatio
 import com.gromo.masterdetailshowcase.features.character_details.navigation.CharacterDetailsScreenRoute
 import com.gromo.masterdetailshowcase.features.episode_details.navigation.EpisodeDetailsScreenRoute
 import com.gromo.masterdetailshowcase.features.home.navigation.HomeNavigation
+import org.koin.core.annotation.Single
 
+@Single(binds = [HomeNavigation::class])
 class HomeNavigationImpl(
     private val navigationManager: NavigationManager
 ) : HomeNavigation {
