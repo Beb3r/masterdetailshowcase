@@ -1,6 +1,12 @@
 A small app showcasing modularisation and clean architecture principles.
 Displays a list of Rick & Morty TV show episodes & characters. Opens a details screen on click.
 
+See the article:
+https://medium.com/@beranger.guillaume/not-another-clean-architecture-article-a-master-details-app-study-case-26c313817a03
+
+and the part 2:
+https://medium.com/@beranger.guillaume/not-another-clean-architecture-article-a-master-details-app-study-case-part-2-725a00c689d6
+
 Stack:
 - Single activity + Compose
 - Version catalog with convention plugins
