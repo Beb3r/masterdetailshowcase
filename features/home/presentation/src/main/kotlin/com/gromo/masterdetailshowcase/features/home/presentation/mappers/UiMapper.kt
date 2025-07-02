@@ -11,15 +11,16 @@ import com.gromo.masterdetailshowcase.features.home.presentation.models.EpisodeU
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeCharacterListViewStateUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeEpisodeListViewStateUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeOnboardingViewStateUiModel
-import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeTopBarActionViewStateUiModel
+import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeTopBarActionDataUiModel
+import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeTopBarActionTypeUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeViewStateUiModel
 import kotlinx.collections.immutable.toPersistentList
+import com.gromo.masterdetailshowcase.libraries.design.R.drawable as drawables
 
 fun toHomeViewState(
     onRefreshTriggered: () -> Unit,
     hasSeenOnboarding: Boolean,
-    onTopBarActionHelpClicked: () -> Unit,
-    onTopBarActionCloseClicked: (Boolean) -> Unit,
+    onTopBarActionClicked: (HomeTopBarActionTypeUiModel) -> Unit,
     shouldShowOnboardingFromUser: Boolean,
     data: HomeDataDomainModel,
     charactersFetchStatus: FetchStatusUiModel,
@@ -27,11 +28,10 @@ fun toHomeViewState(
     onCharacterClicked: (Int) -> Unit,
     onEpisodeClicked: (Int) -> Unit,
 ): HomeViewStateUiModel {
-    val topBarActionViewState = getTopBarActionViewState(
+    val topBarActionData = getTopBarActionData(
         hasSeenOnboarding = hasSeenOnboarding,
         shouldShowOnboardingFromUser = shouldShowOnboardingFromUser,
-        onTopBarActionCloseClicked = onTopBarActionCloseClicked,
-        onTopBarActionHelpClicked = onTopBarActionHelpClicked,
+        onTopBarActionClicked = onTopBarActionClicked,
     )
     val onboardingViewState = getOnboardingViewState(
         hasSeenOnboarding = hasSeenOnboarding,
@@ -55,35 +55,37 @@ fun toHomeViewState(
     return HomeViewStateUiModel(
         isRefreshing = isLoading,
         onRefreshTriggered = onRefreshTriggered,
-        topBarActionViewState = topBarActionViewState,
+        topBarActionData = topBarActionData,
         onboardingViewState = onboardingViewState,
         characterListViewState = characterListViewState,
         episodeListViewState = episodeListViewState,
     )
 }
 
-private fun getTopBarActionViewState(
+private fun getTopBarActionData(
     hasSeenOnboarding: Boolean,
     shouldShowOnboardingFromUser: Boolean,
-    onTopBarActionHelpClicked: () -> Unit,
-    onTopBarActionCloseClicked: (Boolean) -> Unit,
-): HomeTopBarActionViewStateUiModel =
-    when {
-        !hasSeenOnboarding -> HomeTopBarActionViewStateUiModel.Close(
-            fromDefault = false,
-            onClick = { onTopBarActionCloseClicked(false) },
+    onTopBarActionClicked: (HomeTopBarActionTypeUiModel) -> Unit,
+): HomeTopBarActionDataUiModel {
+
+    val (iconResId, type) = when {
+        !hasSeenOnboarding -> drawables.ic_close_24 to HomeTopBarActionTypeUiModel.Close(
+            openedByUser = false
         )
 
-        shouldShowOnboardingFromUser -> HomeTopBarActionViewStateUiModel.Close(
-            fromDefault = false,
-            onClick = { onTopBarActionCloseClicked(true) },
+        shouldShowOnboardingFromUser -> drawables.ic_close_24 to HomeTopBarActionTypeUiModel.Close(
+            openedByUser = true
         )
 
-        else -> HomeTopBarActionViewStateUiModel.Help(
-            fromDefault = false,
-            onClick = onTopBarActionHelpClicked,
-        )
+        else -> drawables.ic_help_outline_24 to HomeTopBarActionTypeUiModel.Help
     }
+
+    return HomeTopBarActionDataUiModel(
+        iconResId = iconResId,
+        type = type,
+        onClick = onTopBarActionClicked,
+    )
+}
 
 private fun getOnboardingViewState(
     hasSeenOnboarding: Boolean,
@@ -121,7 +123,7 @@ private fun getCharacterListViewState(
             HomeCharacterListViewStateUiModel.Filled(
                 characters = characters.map {
                     it.toUiModel(
-                        onClick = { characterId -> onCharacterClicked(characterId) }
+                        onClick = onCharacterClicked
                     )
                 }.toPersistentList()
             )
@@ -155,7 +157,7 @@ private fun getEpisodeListViewState(
             HomeEpisodeListViewStateUiModel.Filled(
                 episodes = episodes.map {
                     it.toUiModel(
-                        onClick = { episodeId -> onEpisodeClicked(episodeId) }
+                        onClick = onEpisodeClicked
                     )
                 }.toPersistentList()
             )

@@ -10,7 +10,10 @@ android {
 
     defaultConfig {
         applicationId = "com.gromo.masterdetailshowcase"
-        resourceConfigurations.addAll(listOf("en", "fr"))
+    }
+
+    androidResources {
+        localeFilters += listOf("en", "fr")
     }
 
     buildFeatures {

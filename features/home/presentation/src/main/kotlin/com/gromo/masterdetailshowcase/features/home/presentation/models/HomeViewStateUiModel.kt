@@ -1,15 +1,16 @@
 package com.gromo.masterdetailshowcase.features.home.presentation.models
 
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import kotlinx.collections.immutable.PersistentList
-import java.util.Objects
+import com.gromo.masterdetailshowcase.libraries.design.R.drawable as drawables
 
 @Immutable
 data class HomeViewStateUiModel(
     val isRefreshing: Boolean,
     val onRefreshTriggered: () -> Unit,
-    val topBarActionViewState: HomeTopBarActionViewStateUiModel,
+    val topBarActionData: HomeTopBarActionDataUiModel,
     val onboardingViewState: HomeOnboardingViewStateUiModel,
     val characterListViewState: HomeCharacterListViewStateUiModel,
     val episodeListViewState: HomeEpisodeListViewStateUiModel,
@@ -19,8 +20,9 @@ data class HomeViewStateUiModel(
         val DEFAULT = HomeViewStateUiModel(
             isRefreshing = false,
             onRefreshTriggered = {},
-            topBarActionViewState = HomeTopBarActionViewStateUiModel.Help(
-                fromDefault = true,
+            topBarActionData = HomeTopBarActionDataUiModel(
+                iconResId = drawables.ic_help_outline_24,
+                type = HomeTopBarActionTypeUiModel.Help,
                 onClick = {}),
             onboardingViewState = HomeOnboardingViewStateUiModel.Hidden,
             characterListViewState = HomeCharacterListViewStateUiModel.Empty,
@@ -30,25 +32,17 @@ data class HomeViewStateUiModel(
 }
 
 @Immutable
-sealed interface HomeTopBarActionViewStateUiModel {
+data class HomeTopBarActionDataUiModel(
+    @DrawableRes
+    val iconResId: Int,
+    val type: HomeTopBarActionTypeUiModel,
+    val onClick: (HomeTopBarActionTypeUiModel) -> Unit,
+)
 
-    @Immutable
-    data class Help(val fromDefault: Boolean, val onClick: () -> Unit) :
-        HomeTopBarActionViewStateUiModel {
-        override fun hashCode(): Int = Objects.hash(fromDefault)
-
-        override fun equals(other: Any?): Boolean =
-            other is Help && other.fromDefault == fromDefault
-    }
-
-    @Immutable
-    data class Close(val fromDefault: Boolean, val onClick: () -> Unit) :
-        HomeTopBarActionViewStateUiModel {
-        override fun hashCode(): Int = Objects.hash(fromDefault)
-
-        override fun equals(other: Any?): Boolean =
-            other is Close && other.fromDefault == fromDefault
-    }
+@Immutable
+sealed interface HomeTopBarActionTypeUiModel {
+    data object Help : HomeTopBarActionTypeUiModel
+    data class Close(val openedByUser: Boolean) : HomeTopBarActionTypeUiModel
 }
 
 @Immutable
@@ -70,12 +64,7 @@ data class CharacterUiModel(
     val name: String,
     val imageUrl: String,
     val onClick: (Int) -> Unit,
-) {
-    override fun hashCode(): Int = Objects.hash(id, name, imageUrl)
-
-    override fun equals(other: Any?): Boolean =
-        other is CharacterUiModel && other.id == id && other.name == name && other.imageUrl == imageUrl
-}
+)
 
 @Immutable
 sealed interface HomeEpisodeListViewStateUiModel {
@@ -95,12 +84,7 @@ data class EpisodeUiModel(
     val id: Int,
     val name: String,
     val onClick: (Int) -> Unit,
-) {
-    override fun hashCode(): Int = Objects.hash(id, name)
-
-    override fun equals(other: Any?): Boolean =
-        other is CharacterUiModel && other.id == id && other.name == name
-}
+)
 
 @Immutable
 sealed interface HomeOnboardingViewStateUiModel {

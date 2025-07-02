@@ -4,16 +4,17 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gromo.masterdetailshowcase.features.characters.domain.use_cases.FetchAllCharactersUseCase
-import com.gromo.masterdetailshowcase.libraries.common.combines
-import com.gromo.masterdetailshowcase.libraries.common.dispatchers.AppCoroutineDispatchers
-import com.gromo.masterdetailshowcase.libraries.common.stateIn
 import com.gromo.masterdetailshowcase.features.episodes.domain.use_cases.FetchAllEpisodesUseCase
-import com.gromo.masterdetailshowcase.features.session.domain.use_cases.ObserveHasSeenOnboardingUseCase
-import com.gromo.masterdetailshowcase.features.session.domain.use_cases.SetHasSeenOnboardingUseCase
 import com.gromo.masterdetailshowcase.features.home.domain.use_cases.ObserveHomeDataUseCase
 import com.gromo.masterdetailshowcase.features.home.navigation.HomeNavigation
 import com.gromo.masterdetailshowcase.features.home.presentation.mappers.toHomeViewState
+import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeTopBarActionTypeUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeViewStateUiModel
+import com.gromo.masterdetailshowcase.features.session.domain.use_cases.ObserveHasSeenOnboardingUseCase
+import com.gromo.masterdetailshowcase.features.session.domain.use_cases.SetHasSeenOnboardingUseCase
+import com.gromo.masterdetailshowcase.libraries.common.combines
+import com.gromo.masterdetailshowcase.libraries.common.dispatchers.AppCoroutineDispatchers
+import com.gromo.masterdetailshowcase.libraries.common.stateIn
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -56,25 +57,12 @@ class HomeViewModel(
                 onRefreshTriggered = { fetchData() },
                 hasSeenOnboarding = hasSeenOnboarding,
                 shouldShowOnboardingFromUser = shouldShowOnboardingFromUser,
-                onTopBarActionHelpClicked = {
-                    shouldShowOnboardingFromUserFlow.value = true
-                },
-                onTopBarActionCloseClicked = { fromUser ->
-                    if (fromUser) {
-                        shouldShowOnboardingFromUserFlow.value = false
-                    } else {
-                        setHasSeenOnboardingUseCase(hasSeen = true)
-                    }
-                },
+                onTopBarActionClicked = ::onTopAppBarActionClicked,
                 data = data,
                 charactersFetchStatus = charactersFetchStatus,
                 episodesFetchStatus = episodesFetchStatus,
-                onCharacterClicked = { id ->
-                    onCharacterClicked(id = id)
-                },
-                onEpisodeClicked = { id ->
-                    onEpisodeClicked(id = id)
-                },
+                onCharacterClicked = ::onCharacterClicked,
+                onEpisodeClicked = ::onEpisodeClicked,
             )
         }.stateIn(
             scope = viewModelScope,
@@ -119,6 +107,22 @@ class HomeViewModel(
                     Timber.w("Error fetching episodes: $error")
                     episodesFetchStatusFlow.value = FetchStatusUiModel.Error
                 }
+        }
+    }
+
+    private fun onTopAppBarActionClicked(type: HomeTopBarActionTypeUiModel) {
+        when (type) {
+            is HomeTopBarActionTypeUiModel.Help -> {
+                shouldShowOnboardingFromUserFlow.value = true
+            }
+
+            is HomeTopBarActionTypeUiModel.Close -> {
+                if (type.openedByUser) {
+                    shouldShowOnboardingFromUserFlow.value = false
+                } else {
+                    setHasSeenOnboardingUseCase(hasSeen = true)
+                }
+            }
         }
     }
 

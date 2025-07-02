@@ -42,18 +42,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.gromo.masterdetailshowcase.libraries.design.AppImage
-import com.gromo.masterdetailshowcase.libraries.design.Spacing16
-import com.gromo.masterdetailshowcase.libraries.design.Spacing24
-import com.gromo.masterdetailshowcase.libraries.design.Spacing8
 import com.gromo.masterdetailshowcase.features.home.presentation.composables.HomeOnboarding
 import com.gromo.masterdetailshowcase.features.home.presentation.models.CharacterUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.EpisodeUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeCharacterListViewStateUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeEpisodeListViewStateUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeOnboardingViewStateUiModel
-import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeTopBarActionViewStateUiModel
+import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeTopBarActionDataUiModel
+import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeTopBarActionTypeUiModel
 import com.gromo.masterdetailshowcase.features.home.presentation.models.HomeViewStateUiModel
+import com.gromo.masterdetailshowcase.libraries.design.AppImage
+import com.gromo.masterdetailshowcase.libraries.design.Spacing16
+import com.gromo.masterdetailshowcase.libraries.design.Spacing24
+import com.gromo.masterdetailshowcase.libraries.design.Spacing8
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
 import kotlinx.collections.immutable.PersistentList
@@ -86,30 +87,19 @@ fun HomeScreen(
                 },
                 actions = {
                     AnimatedContent(
-                        targetState = viewState.topBarActionViewState,
+                        targetState = viewState.topBarActionData,
                         transitionSpec = {
                             scaleIn() togetherWith scaleOut()
                         },
                         label = "toolbar action animation"
                     ) { targetState ->
-                        when (targetState) {
-                            is HomeTopBarActionViewStateUiModel.Help -> {
-                                IconButton(onClick = targetState.onClick) {
-                                    Icon(
-                                        painter = painterResource(drawables.ic_help_outline_24),
-                                        contentDescription = ""
-                                    )
-                                }
-                            }
-
-                            is HomeTopBarActionViewStateUiModel.Close -> {
-                                IconButton(onClick = targetState.onClick) {
-                                    Icon(
-                                        painter = painterResource(drawables.ic_close_24),
-                                        contentDescription = ""
-                                    )
-                                }
-                            }
+                        IconButton(onClick = {
+                            targetState.onClick(targetState.type)
+                        }) {
+                            Icon(
+                                painter = painterResource(targetState.iconResId),
+                                contentDescription = ""
+                            )
                         }
                     }
                 }
@@ -323,10 +313,10 @@ fun HomeContentPreviewEmpty() {
         viewState = HomeViewStateUiModel(
             isRefreshing = false,
             onRefreshTriggered = {},
-            topBarActionViewState = HomeTopBarActionViewStateUiModel.Help(
-                fromDefault = false,
-                onClick = {},
-            ),
+            topBarActionData = HomeTopBarActionDataUiModel(
+                iconResId = drawables.ic_help_outline_24,
+                type = HomeTopBarActionTypeUiModel.Help,
+                onClick = {}),
             onboardingViewState = HomeOnboardingViewStateUiModel.Hidden,
             characterListViewState = HomeCharacterListViewStateUiModel.Empty,
             episodeListViewState = HomeEpisodeListViewStateUiModel.Empty,
@@ -342,10 +332,10 @@ fun HomeContentPreviewError() {
         viewState = HomeViewStateUiModel(
             isRefreshing = false,
             onRefreshTriggered = {},
-            topBarActionViewState = HomeTopBarActionViewStateUiModel.Help(
-                fromDefault = false,
-                onClick = {},
-            ),
+            topBarActionData = HomeTopBarActionDataUiModel(
+                iconResId = drawables.ic_help_outline_24,
+                type = HomeTopBarActionTypeUiModel.Help,
+                onClick = {}),
             onboardingViewState = HomeOnboardingViewStateUiModel.Hidden,
             characterListViewState = HomeCharacterListViewStateUiModel.Error,
             episodeListViewState = HomeEpisodeListViewStateUiModel.Error,
@@ -361,10 +351,10 @@ fun HomeContentPreviewFilled() {
         viewState = HomeViewStateUiModel(
             isRefreshing = false,
             onRefreshTriggered = {},
-            topBarActionViewState = HomeTopBarActionViewStateUiModel.Help(
-                fromDefault = false,
-                onClick = {},
-            ),
+            topBarActionData = HomeTopBarActionDataUiModel(
+                iconResId = drawables.ic_help_outline_24,
+                type = HomeTopBarActionTypeUiModel.Help,
+                onClick = {}),
             onboardingViewState = HomeOnboardingViewStateUiModel.Hidden,
             characterListViewState = HomeCharacterListViewStateUiModel.Filled(
                 characters = persistentListOf(
@@ -408,10 +398,10 @@ fun HomeOnboardingPreview() {
         viewState = HomeViewStateUiModel(
             isRefreshing = false,
             onRefreshTriggered = {},
-            topBarActionViewState = HomeTopBarActionViewStateUiModel.Close(
-                fromDefault = false,
-                onClick = {},
-            ),
+            topBarActionData = HomeTopBarActionDataUiModel(
+                iconResId = drawables.ic_close_24,
+                type = HomeTopBarActionTypeUiModel.Close(true),
+                onClick = {}),
             onboardingViewState = HomeOnboardingViewStateUiModel.Visible(overlayColor = Color.Transparent),
             characterListViewState = HomeCharacterListViewStateUiModel.Empty,
             episodeListViewState = HomeEpisodeListViewStateUiModel.Empty,

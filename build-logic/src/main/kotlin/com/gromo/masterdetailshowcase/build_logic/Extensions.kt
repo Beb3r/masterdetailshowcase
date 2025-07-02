@@ -14,6 +14,7 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 import org.gradle.plugin.use.PluginDependency
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val Project.libs
@@ -28,7 +29,10 @@ fun PluginManager.alias(notation: ProviderConvertible<PluginDependency>) {
 }
 
 fun DependencyHandler.implementation(provider: Provider<MinimalExternalModuleDependency>) {
-    add("implementation", provider.get().group + ":" + provider.get().name + ":" + provider.get().version)
+    add(
+        "implementation",
+        provider.get().group + ":" + provider.get().name + ":" + provider.get().version
+    )
 }
 
 fun DependencyHandler.ksp(provider: Provider<MinimalExternalModuleDependency>) {
@@ -83,14 +87,9 @@ fun Project.setupAndroidModule(isApplication: Boolean) {
 
 private fun Project.configureKotlin() {
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_17.toString()
-            allWarningsAsErrors = true
-            freeCompilerArgs += listOf(
-                "-opt-in=kotlin.RequiresOptIn",
-                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-opt-in=kotlinx.coroutines.FlowPreview"
-            )
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+            freeCompilerArgs.add("-Xannotation-default-target=param-property")
         }
     }
 }

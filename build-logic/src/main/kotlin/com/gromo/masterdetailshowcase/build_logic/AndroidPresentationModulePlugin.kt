@@ -11,6 +11,7 @@ class AndroidPresentationModulePlugin : Plugin<Project> {
                 alias(libs.plugins.kotlin.compose)
             }
             dependencies {
+                implementation(libs.androidx.navigation)
                 implementation(libs.androidx.lifecycle.runtime.ktx)
                 implementation(platform(libs.androidx.compose.bom))
                 implementation(libs.androidx.activity.compose)
