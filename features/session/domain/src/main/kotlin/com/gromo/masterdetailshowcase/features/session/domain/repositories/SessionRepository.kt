@@ -9,8 +9,8 @@ class SessionRepository(
     private val localDataSource: SessionLocalDataSource,
 ) {
 
-    fun setHasSeenOnboarding(hasSeen: Boolean) {
-        localDataSource.hasSeenOnboarding = hasSeen
+    suspend fun setHasSeenOnboarding(hasSeen: Boolean) {
+        localDataSource.setHasSeenOnboarding(hasSeen = hasSeen)
     }
 
     fun observeHasSeenOnboarding(): Flow<Boolean> = localDataSource.observeHasSeenOnboarding()

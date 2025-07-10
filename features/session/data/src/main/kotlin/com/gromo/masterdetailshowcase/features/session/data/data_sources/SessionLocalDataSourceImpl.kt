@@ -1,63 +1,75 @@
 package com.gromo.masterdetailshowcase.features.session.data.data_sources
 
 import android.content.Context
-import android.content.SharedPreferences
-import androidx.core.content.edit
-import com.gromo.masterdetailshowcase.libraries.common.sharedPreferences
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.IOException
+import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import com.gromo.masterdetailshowcase.features.session.domain.data_sources.SessionLocalDataSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
+import okio.Path.Companion.toPath
 import org.koin.core.annotation.Single
 
 @Single(binds = [SessionLocalDataSource::class])
 class SessionLocalDataSourceImpl(
     context: Context
-): SessionLocalDataSource, SharedPreferences.OnSharedPreferenceChangeListener {
+) : SessionLocalDataSource {
 
     companion object {
         private const val SHARED_PREFERENCES_NAME = "164f1b75-f1f6-4045-bdae-13ed0175600e"
 
-        private const val KEY_HAS_SEEN_ONBOARDING = "1192487f-c02a-4bc2-9d9e-1faa6ec8e96f"
+        private val KEY_HAS_SEEN_ONBOARDING =
+            booleanPreferencesKey("1192487f-c02a-4bc2-9d9e-1faa6ec8e96f")
 
         private const val DEFAULT_VALUE_HAS_SEEN_ONBOARDING = false
     }
 
-    private val preferenceKeyChangedFlow = MutableSharedFlow<String>(extraBufferCapacity = 1)
-    private val sharedPref by context.sharedPreferences(SHARED_PREFERENCES_NAME)
+    private fun sharedPreferencesMigration(context: Context) =
+        listOf(SharedPreferencesMigration(context, SHARED_PREFERENCES_NAME))
 
-    init {
-        sharedPref.registerOnSharedPreferenceChangeListener(this)
-    }
+    private val dataStore = PreferenceDataStoreFactory.createWithPath(
+        migrations = sharedPreferencesMigration(context),
+        produceFile = { context.filesDir.resolve("${SHARED_PREFERENCES_NAME}.preferences_pb").absolutePath.toPath() },
+    )
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        key?.let {
-            preferenceKeyChangedFlow.tryEmit(it)
+    override suspend fun getHasSeenOnboarding(): Boolean =
+        dataStore.observeKey(
+            key = KEY_HAS_SEEN_ONBOARDING,
+            defaultValue = DEFAULT_VALUE_HAS_SEEN_ONBOARDING
+        ).first()
+
+    override suspend fun setHasSeenOnboarding(hasSeen: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[KEY_HAS_SEEN_ONBOARDING] = hasSeen
         }
     }
-
-    override var hasSeenOnboarding: Boolean
-        get() = sharedPref.getBoolean(
-            KEY_HAS_SEEN_ONBOARDING,
-            DEFAULT_VALUE_HAS_SEEN_ONBOARDING
-        )
-        set(value) = sharedPref.edit {
-            putBoolean(KEY_HAS_SEEN_ONBOARDING, value)
-        }
 
     override fun observeHasSeenOnboarding(): Flow<Boolean> =
-        createPreferenceFlow(KEY_HAS_SEEN_ONBOARDING) { hasSeenOnboarding }
+        dataStore.observeKey(
+            key = KEY_HAS_SEEN_ONBOARDING,
+            defaultValue = DEFAULT_VALUE_HAS_SEEN_ONBOARDING
+        )
+}
 
-    private inline fun <T> createPreferenceFlow(
-        key: String,
-        crossinline getValue: () -> T,
-    ): Flow<T> = preferenceKeyChangedFlow
-        // Emit on start so that we always send the initial value
-        .onStart { emit(key) }
-        .filter { it == key }
-        .map { getValue() }
-        .distinctUntilChanged()
+fun <T> DataStore<Preferences>.observeKey(
+    key: Preferences.Key<T>,
+    defaultValue: T,
+): Flow<T> {
+    return this.data
+        .catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }.map { preferences ->
+            preferences[key] ?: defaultValue
+        }
 }

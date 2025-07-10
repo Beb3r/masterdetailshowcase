@@ -21,6 +21,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import timber.log.Timber
 
@@ -120,7 +121,9 @@ class HomeViewModel(
                 if (type.openedByUser) {
                     shouldShowOnboardingFromUserFlow.value = false
                 } else {
-                    setHasSeenOnboardingUseCase(hasSeen = true)
+                    viewModelScope.launch(coroutineDispatcher.io) {
+                        setHasSeenOnboardingUseCase(hasSeen = true)
+                    }
                 }
             }
         }

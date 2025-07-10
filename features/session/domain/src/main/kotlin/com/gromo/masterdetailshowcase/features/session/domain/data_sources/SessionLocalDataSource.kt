@@ -4,7 +4,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface SessionLocalDataSource {
 
-    var hasSeenOnboarding: Boolean
+    suspend fun getHasSeenOnboarding(): Boolean
+
+    suspend fun setHasSeenOnboarding(hasSeen: Boolean)
 
     fun observeHasSeenOnboarding(): Flow<Boolean>
 }

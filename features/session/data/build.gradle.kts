@@ -7,6 +7,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.bundles.datastore)
     implementation(projects.libraries.common)
     implementation(projects.features.session.domain)
+
 }

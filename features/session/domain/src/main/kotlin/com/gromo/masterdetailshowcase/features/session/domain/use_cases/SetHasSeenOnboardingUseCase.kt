@@ -8,5 +8,5 @@ class SetHasSeenOnboardingUseCase(
     private val repository: SessionRepository
 ) {
 
-    operator fun invoke(hasSeen: Boolean) = repository.setHasSeenOnboarding(hasSeen = hasSeen)
+    suspend operator fun invoke(hasSeen: Boolean) = repository.setHasSeenOnboarding(hasSeen = hasSeen)
 }
