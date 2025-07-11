@@ -40,7 +40,7 @@ class CharacterDetailsViewModel(
             }
 
             if (character == null) {
-                // display error message and navigate back
+                // TODO: display error state
                 CharacterDetailsViewStateUiModel.DEFAULT
             } else {
                 CharacterDetailsViewStateUiModel(

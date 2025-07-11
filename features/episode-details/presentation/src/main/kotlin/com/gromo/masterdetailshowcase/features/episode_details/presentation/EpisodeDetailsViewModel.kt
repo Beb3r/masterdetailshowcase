@@ -30,7 +30,7 @@ class EpisodeDetailsViewModel(
             observeEpisodeByIdUseCase(it)
         }.mapLatest { episode ->
             if (episode == null) {
-                // display error message and navigate back
+                // TODO: display error state
                 EpisodeDetailsViewStateUiModel.DEFAULT
             } else {
                 EpisodeDetailsViewStateUiModel(
