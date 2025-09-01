@@ -51,11 +51,11 @@ fun Project.setupAndroidModule(isApplication: Boolean) {
     }
 
     extensions.configure<BaseExtension> {
-        compileSdkVersion(35)
+        compileSdkVersion(36)
 
         defaultConfig {
             minSdk = 26
-            targetSdk = 35
+            targetSdk = 36
             versionCode = 1
             versionName = "1.0"
 
@@ -65,20 +65,6 @@ fun Project.setupAndroidModule(isApplication: Boolean) {
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_17
             targetCompatibility = JavaVersion.VERSION_17
-        }
-
-        buildTypes {
-            buildTypes {
-                maybeCreate("debug")
-                maybeCreate("release")
-                named("release") {
-                    isMinifyEnabled = true
-                    proguardFiles(
-                        getDefaultProguardFile("proguard-android-optimize.txt"),
-                        "proguard-rules.pro"
-                    )
-                }
-            }
         }
 
         configureKotlin()

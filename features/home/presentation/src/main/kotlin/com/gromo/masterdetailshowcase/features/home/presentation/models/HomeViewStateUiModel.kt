@@ -23,7 +23,8 @@ data class HomeViewStateUiModel(
             topBarActionData = HomeTopBarActionDataUiModel(
                 iconResId = drawables.ic_help_outline_24,
                 type = HomeTopBarActionTypeUiModel.Help,
-                onClick = {}),
+                onClick = {}
+            ),
             onboardingViewState = HomeOnboardingViewStateUiModel.Hidden,
             characterListViewState = HomeCharacterListViewStateUiModel.Empty,
             episodeListViewState = HomeEpisodeListViewStateUiModel.Empty,
