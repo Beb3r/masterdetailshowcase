@@ -72,10 +72,6 @@ fun HomeScreen(
 
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(viewModel) {
-        viewModel.onViewInitialised()
-    }
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
