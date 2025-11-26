@@ -12,6 +12,7 @@
     <string name="home_onboarding_title">Welcome to Rick &amp; Morty!</string>
     <string name="home_onboarding_subtitle">This is a demo app to showcase best practices around clean architecture and modularization. Please don’t mind the design, it ain’t its purpose (and it’s not my job)</string>
 
+    <string name="character_details_unselected">Select a character to see the details</string>
     <string name="character_details_name">Name: %1$s</string>
     <string name="character_details_status">Status: %1$s</string>
     <string name="character_details_type">Type: %1$s</string>

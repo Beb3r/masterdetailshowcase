@@ -2,8 +2,8 @@ package com.gromo.masterdetailshowcase.libraries.navigation.api_impl
 
 import com.gromo.masterdetailshowcase.libraries.navigation.api_impl.manager.NavigationCommand
 import com.gromo.masterdetailshowcase.libraries.navigation.api_impl.manager.NavigationManager
-import com.gromo.masterdetailshowcase.features.character_details.navigation.CharacterDetailsScreenRoute
-import com.gromo.masterdetailshowcase.features.episode_details.navigation.EpisodeDetailsScreenRoute
+import com.gromo.masterdetailshowcase.features.character_details.navigation.CharacterDetailsScreenKey
+import com.gromo.masterdetailshowcase.features.episode_details.navigation.EpisodeDetailsScreenKey
 import com.gromo.masterdetailshowcase.features.home.navigation.HomeNavigation
 import org.koin.core.annotation.Single
 
@@ -14,16 +14,21 @@ class HomeNavigationImpl(
 
     override fun navigateToCharacterDetails(id: Int) {
         navigationManager.navigate(
-            command = NavigationCommand.NavigateToRoute(
-                route = CharacterDetailsScreenRoute(id = id)
+            command = NavigationCommand.NavigateToKey(
+                key = CharacterDetailsScreenKey(id = id),
+                // can be useful to keep only one instance of detail screen in the back stack (when multiple panels)
+                // but the composable is recreated each time we navigate to it
+                /*withOperations = { backStack ->
+                    backStack.removeIf { it is CharacterDetailsScreenKey }
+                }*/
             )
         )
     }
 
     override fun navigateToEpisodeDetails(id: Int) {
         navigationManager.navigate(
-            command = NavigationCommand.NavigateToRoute(
-                route = EpisodeDetailsScreenRoute(id = id)
+            command = NavigationCommand.NavigateToKey(
+                key = EpisodeDetailsScreenKey(id = id)
             )
         )
     }

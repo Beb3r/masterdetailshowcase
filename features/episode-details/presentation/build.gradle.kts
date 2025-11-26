@@ -8,6 +8,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.navigation3.runtime)
+
     implementation(projects.libraries.common)
     implementation(projects.libraries.design)
     implementation(projects.libraries.navigation.api)

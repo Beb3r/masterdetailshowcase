@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="home_episode_list_title">Episodes</string>
-    <string name="home_episode_list_empty">No episode to show!</string>
-    <string name="home_episode_list_error">Hmm something went wrong with them episodes</string>
+    <string name="home_episode_list_empty">Aucun épisode trouvé</string>
+    <string name="home_episode_list_error">Hmm patience, on répare tout ca</string>
     <string name="home_character_list_title">Personnages</string>
-    <string name="home_character_list_empty">Aucun personnages trouvés</string>
+    <string name="home_character_list_empty">Aucun personnage trouvé</string>
     <string name="home_character_list_error">Hmm patience, on répare tout ca</string>
     <string name="home_onboarding_title">Bienvenue sur Rick &amp; Morty!</string>
     <string name="home_onboarding_subtitle"> Cette app est une démo pour montrer les bonnes pratiques autour de la clean architecture et de la modularisation. Ne faites pas attention au design, ce n’est pas son but (et ce n’est pas mon job non plus)</string>
 
+    <string name="character_details_unselected">Choisssissez un personnage pour voir ses caractéristiques</string>
     <string name="character_details_name">Nom: %1$s</string>
     <string name="character_details_status">Status: %1$s</string>
     <string name="character_details_type">Type: %1$s</string>

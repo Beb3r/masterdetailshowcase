@@ -21,18 +21,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.gromo.masterdetailshowcase.features.episode_details.presentation.models.EpisodeDetailsViewStateUiModel
 import com.gromo.masterdetailshowcase.libraries.design.Spacing16
 import com.gromo.masterdetailshowcase.libraries.design.Spacing24
 import com.gromo.masterdetailshowcase.libraries.design.Spacing8
-import com.gromo.masterdetailshowcase.features.episode_details.presentation.models.EpisodeDetailsViewStateUiModel
-import org.koin.androidx.compose.koinViewModel
 import com.gromo.masterdetailshowcase.libraries.design.R.drawable as drawables
 import com.gromo.masterdetailshowcase.libraries.translations.R.string as translations
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EpisodeDetailsScreen(
-    viewModel: EpisodeDetailsViewModel = koinViewModel(),
+    viewModel: EpisodeDetailsViewModel,
 ) {
 
 
