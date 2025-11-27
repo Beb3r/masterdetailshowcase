@@ -36,7 +36,10 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.navigation)
+    implementation(libs.androidx.compose.adaptive.navigation3)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -44,7 +47,6 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.test.manifest)
-
 
     implementation(projects.libraries.common)
     implementation(projects.libraries.design)

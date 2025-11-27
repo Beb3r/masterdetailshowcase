@@ -8,8 +8,8 @@ android {
     namespace = "com.gromo.masterdetailshowcase.libraries.navigation.api_impl"
 }
 
-dependencies{
-    implementation(libs.androidx.navigation)
+dependencies {
+    implementation(libs.androidx.navigation3.runtime)
 
     implementation(projects.libraries.common)
     implementation(projects.libraries.navigation.api)

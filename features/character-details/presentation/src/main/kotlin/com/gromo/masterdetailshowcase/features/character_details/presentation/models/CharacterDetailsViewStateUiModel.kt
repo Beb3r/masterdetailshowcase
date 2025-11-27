@@ -7,8 +7,35 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 data class CharacterDetailsViewStateUiModel(
-    val id: Int,
     val topBarColor: Color,
+    val navigationIconViewState: CharacterDetailsNavigationIconViewStateUiModel,
+    val title: String,
+    val body: CharacterDetailsBodyUiModel,
+
+    ) {
+    companion object {
+        val DEFAULT = CharacterDetailsViewStateUiModel(
+            topBarColor = Color.Transparent,
+            navigationIconViewState = CharacterDetailsNavigationIconViewStateUiModel.Hidden,
+            title = "-",
+            body = CharacterDetailsBodyUiModel.DEFAULT,
+        )
+    }
+}
+
+@Immutable
+sealed interface CharacterDetailsNavigationIconViewStateUiModel {
+    data object Hidden : CharacterDetailsNavigationIconViewStateUiModel
+
+    @Immutable
+    data class Visible(
+        val onBackClicked: () -> Unit,
+    ) : CharacterDetailsNavigationIconViewStateUiModel
+}
+
+@Immutable
+data class CharacterDetailsBodyUiModel(
+    val id: Int,
     val name: String,
     val status: String,
     val species: String,
@@ -17,10 +44,9 @@ data class CharacterDetailsViewStateUiModel(
     val imageUrl: String,
     val episodes: PersistentList<String>,
 ) {
-    companion object {
-        val DEFAULT = CharacterDetailsViewStateUiModel(
+    companion object Companion {
+        val DEFAULT = CharacterDetailsBodyUiModel(
             id = -1,
-            topBarColor = Color.Transparent,
             name = "-",
             status = "-",
             species = "-",

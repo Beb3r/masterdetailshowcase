@@ -1,9 +1,10 @@
 package com.gromo.masterdetailshowcase.libraries.navigation.api
 
-import androidx.navigation.NavController
+import androidx.compose.runtime.snapshots.SnapshotStateList
 
 interface NavControllerAccessor {
 
-    fun setController(navController: NavController)
-    fun clear()
+    fun getBackStack(): SnapshotStateList<NavigationKey>
+
+    fun goBack()
 }

@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.module.android.library)
-    alias(libs.plugins.kotlinx.serialization)
 }
 
 android {
@@ -8,7 +7,5 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinx.serialization)
-
     implementation(projects.libraries.navigation.api)
 }

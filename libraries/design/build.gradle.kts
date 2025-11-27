@@ -9,4 +9,7 @@ android {
 
 dependencies {
     implementation(libs.bundles.coil)
+    implementation(libs.androidx.compose.adaptive.navigation3)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
 }

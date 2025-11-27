@@ -1,18 +1,20 @@
 package com.gromo.masterdetailshowcase.libraries.navigation.api_impl.manager
 
-import androidx.navigation.NavOptions
-import com.gromo.masterdetailshowcase.libraries.navigation.api.NavigationRoute
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.gromo.masterdetailshowcase.libraries.navigation.api.NavigationKey
 
 sealed interface NavigationCommand {
 
     data object NavigateUp : NavigationCommand
 
-    data class NavigateToRoute(val route: NavigationRoute, val options: NavOptions? = null) :
-        NavigationCommand
+    data class NavigateToKey(
+        val key: NavigationKey,
+        val withOperations: ((SnapshotStateList<NavigationKey>) -> Unit)? = null
+    ) : NavigationCommand
 
-    data class PopUpToRoute(
-        val route: NavigationRoute,
+    data class PopUpToKey(
+        val route: NavigationKey,
         val inclusive: Boolean,
-        val fallBackRoute: NavigationRoute,
+        val fallBackRoute: NavigationKey,
     ) : NavigationCommand
 }
