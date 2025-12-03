@@ -4,6 +4,8 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 @Immutable
 data class CharacterDetailsViewStateUiModel(
@@ -31,6 +33,14 @@ sealed interface CharacterDetailsNavigationIconViewStateUiModel {
     data class Visible(
         val onBackClicked: () -> Unit,
     ) : CharacterDetailsNavigationIconViewStateUiModel
+}
+
+@OptIn(ExperimentalContracts::class)
+fun CharacterDetailsNavigationIconViewStateUiModel.isVisible(): Boolean {
+    contract {
+        returns(true) implies (this@isVisible is CharacterDetailsNavigationIconViewStateUiModel.Visible)
+    }
+    return this is CharacterDetailsNavigationIconViewStateUiModel.Visible
 }
 
 @Immutable

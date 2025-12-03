@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gromo.masterdetailshowcase.features.character_details.presentation.models.CharacterDetailsBodyUiModel
 import com.gromo.masterdetailshowcase.features.character_details.presentation.models.CharacterDetailsNavigationIconViewStateUiModel
 import com.gromo.masterdetailshowcase.features.character_details.presentation.models.CharacterDetailsViewStateUiModel
+import com.gromo.masterdetailshowcase.features.character_details.presentation.models.isVisible
 import com.gromo.masterdetailshowcase.libraries.design.AppImage
 import com.gromo.masterdetailshowcase.libraries.design.Spacing16
 import com.gromo.masterdetailshowcase.libraries.design.Spacing24
@@ -113,7 +114,7 @@ fun CharacterDetailsContent(
 fun CharacterDetailsNavigationIcon(
     viewState: CharacterDetailsNavigationIconViewStateUiModel,
 ) {
-    if (viewState is CharacterDetailsNavigationIconViewStateUiModel.Visible) {
+    if (viewState.isVisible()) {
         IconButton(onClick = viewState.onBackClicked) {
             Icon(
                 painter = painterResource(drawables.ic_arrow_back_24),
