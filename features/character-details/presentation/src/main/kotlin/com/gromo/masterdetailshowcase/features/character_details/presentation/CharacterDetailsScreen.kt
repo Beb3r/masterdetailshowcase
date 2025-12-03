@@ -108,8 +108,6 @@ fun CharacterDetailsContent(
 
 
 }
-
-@OptIn(ExperimentalContracts::class)
 @Composable
 fun CharacterDetailsNavigationIcon(
     viewState: CharacterDetailsNavigationIconViewStateUiModel,
