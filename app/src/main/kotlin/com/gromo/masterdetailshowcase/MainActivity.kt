@@ -10,6 +10,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.gromo.masterdetailshowcase.features.character_details.navigation.CharacterDetailsScreenKey
@@ -29,19 +30,18 @@ import com.gromo.masterdetailshowcase.libraries.navigation.api.NavControllerAcce
 import org.koin.android.ext.android.get
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d("TEEST onCreate")
         enableEdgeToEdge()
         setContent {
             MasterDetailShowCaseTheme {
                 val navigationManager: NavControllerAccessor = get()
                 val strategy = rememberListDetailSceneStrategyCustom<Any>()
+                val backStack = rememberNavBackStack()
 
                 NavDisplay(
                     backStack = navigationManager.getBackStack(),

@@ -4,13 +4,13 @@ import android.content.Context
 import androidx.room.Room
 import com.gromo.masterdetailshowcase.libraries.persistence.api_impl.PersistentDataBase
 import com.gromo.masterdetailshowcase.libraries.persistence.api_impl.migrations.Migration1to2
-import org.koin.android.ext.koin.androidContext
 import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Configuration
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
-import org.koin.dsl.module
 
 @Module
+@Configuration
 @ComponentScan("com.gromo.masterdetailshowcase.libraries.persistence.api_impl.di")
 class DatabaseModule
 

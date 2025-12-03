@@ -13,10 +13,12 @@ import io.ktor.http.append
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Configuration
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
 @Module
+@Configuration
 @ComponentScan("com.gromo.masterdetailshowcase.libraries.network")
 class NetworkModule
 
